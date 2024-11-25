@@ -5,11 +5,23 @@
     min-height: 100svh;
 }
 
+.app::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: url("../chess-background.jpg") center / cover no-repeat;
+    filter: blur(3px);
+    z-index: -1;
+}
+
 .board {
     width: calc(64px * 8);
     height: calc(64px * 8);
     display: flex;
     flex-wrap: wrap;
+    border: 1px solid #000;
+    filter: drop-shadow(0 0 25px #000);
 }
 
 .cell {
@@ -27,7 +39,7 @@
 }
 
 .black {
-    background-color: dimgrey;
+    background-color: rgb(120, 120, 120);
 }
 
 .white {
