@@ -12,7 +12,7 @@
     position: absolute;
     height: 100%;
     width: 100%;
-    background: url("../chess-background.jpg") center / cover no-repeat;
+    background: url("./assets/chess-background.jpg") center / cover no-repeat;
     filter: blur(3px);
     z-index: -1;
 }

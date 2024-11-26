@@ -38,8 +38,7 @@ export class Pawn extends Figure {
         return false;
     }
 
-    moveFigure(target: Cell): void {
-        super.moveFigure(target);
+    moveFigure(): void {
         this.isFirstStep = false;
     }
 }
