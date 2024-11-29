@@ -4,6 +4,7 @@ import BoardComponent from "./components/BoardComponent";
 import { Player } from "./models/Player";
 import { Colors } from "./models/Colors";
 import LostFigures from "./components/LostFigures";
+import Timer from "./components/TImer";
 
 function App() {
     const [board, setBoard] = useState(new Board());
@@ -37,6 +38,10 @@ function App() {
                     setBoard={setBoard}
                     currentPlayer={currentPlayer}
                     swapPlayer={swapPlayer}
+                />
+                <Timer
+                    restart={restart}
+                    currentPlayer={currentPlayer}
                 />
             </div>
             <LostFigures title="Белые фигуры" figures={board.lostWhiteFigures} />

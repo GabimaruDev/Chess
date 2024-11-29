@@ -66,7 +66,7 @@
 
 .lost {
     padding: 20px 15px;
-    margin: 15px;
+    margin: 10px;
     background-color: rgb(120, 120, 120);
 }
 
@@ -76,4 +76,18 @@
 
 .lost__description {
     font-size: 20px;
+}
+
+.timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(120, 120, 120);
+    margin: 10px;
+    padding: 10px;
+}
+
+.timer__time {
+    display: flex;
+    gap: 10px;
 }
