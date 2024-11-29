@@ -1,20 +1,17 @@
 .app {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100svh;
     color: #fff;
+    background: url("./assets/chess-background.jpg") center / cover;
+    z-index: -2;
 }
 
-.app::before {
-    content: "";
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background: url("./assets/chess-background.jpg") center / cover no-repeat;
-    filter: blur(3px);
-    z-index: -1;
+.board-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .board {
@@ -23,7 +20,7 @@
     display: flex;
     flex-wrap: wrap;
     border: 1px solid #000;
-    filter: drop-shadow(0 0 25px #000);
+    filter: drop-shadow(0 0 15px #000);
 }
 
 .cell {
@@ -61,4 +58,22 @@
 
 .available-enemy img {
     filter: drop-shadow(0px 0px 12px red);
+}
+
+.lost-wrapper {
+    display: flex;
+}
+
+.lost {
+    padding: 20px 15px;
+    margin: 15px;
+    background-color: rgb(120, 120, 120);
+}
+
+.lost__title {
+    margin: 0 0 10px 0;
+}
+
+.lost__description {
+    font-size: 20px;
 }
