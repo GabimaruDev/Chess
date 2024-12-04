@@ -6,6 +6,7 @@
     color: #fff;
     background: url("./assets/chess-background.jpg") center / cover;
     z-index: -2;
+    user-select: none;
 }
 
 .board-wrapper {
@@ -57,7 +58,7 @@
 }
 
 .available-enemy img {
-    filter: drop-shadow(0px 0px 12px red);
+    filter: drop-shadow(0px 0px 10px red);
 }
 
 .lost-wrapper {
@@ -65,17 +66,21 @@
 }
 
 .lost {
-    padding: 20px 15px;
-    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1rem;
+    margin: 0.625rem;
     background-color: rgb(120, 120, 120);
 }
 
 .lost__title {
-    margin: 0 0 10px 0;
+    margin: 0 0 0.625rem 0;
+    display: flex;
+    justify-content: center;
 }
 
 .lost__description {
-    font-size: 20px;
+    display: flex;
 }
 
 .timer {
@@ -83,11 +88,84 @@
     flex-direction: column;
     align-items: center;
     background-color: rgb(120, 120, 120);
-    margin: 10px;
-    padding: 10px;
+    margin: 0.625rem;
+    padding: 0.625rem;
 }
 
 .timer__time {
     display: flex;
-    gap: 10px;
+    gap: 1rem;
+}
+
+.modal-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100svh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    color: #000;
+    padding: 0.75rem 0.5rem;
+    border-radius: 0.4rem;
+    min-width: 13rem;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-body {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-body p {
+    margin: 1rem 0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.btn {
+    padding: 0.25rem 0.3rem;
+    border: 0;
+    background-color: #ddd;
+    border-radius: 0.2rem;
+}
+
+@media (max-width: 767.98px) {
+    .board {
+        width: calc(40px * 8);
+        height: calc(40px * 8);
+    }
+
+    .cell {
+        width: 40px;
+        height: 40px;
+    }
+
+    .cell img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .available {
+        height: 8px;
+        width: 8px;
+    }
+
+    .available-enemy img {
+        filter: drop-shadow(0px 0px 6px red);
+    }
 }

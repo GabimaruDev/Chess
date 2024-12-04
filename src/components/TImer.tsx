@@ -1,6 +1,8 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { Player } from "../models/Player";
 import { Colors } from "../models/Colors";
+import { Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 
 interface TimerProps {
     currentPlayer: Player;
@@ -10,46 +12,79 @@ interface TimerProps {
 const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
     const [blackTime, setBlackTime] = useState(300);
     const [whiteTime, setWhiteTime] = useState(300);
-    const timer = useRef<null | ReturnType<typeof setInterval>>(null)
+    const timer = useRef<null | ReturnType<typeof setInterval>>(null);
 
     useEffect(() => {
-        startTimer()
-    }, [currentPlayer])
-    
+        startTimer();
+    }, [currentPlayer]);
 
     function startTimer() {
         if (timer.current) {
-            clearInterval(timer.current)
+            clearInterval(timer.current);
         }
 
-        const callback = currentPlayer?.color === Colors.WHITE ? decrementWhiteTimer : decrementBlackTimer
+        const callback =
+            currentPlayer?.color === Colors.WHITE ? decrementWhiteTimer : decrementBlackTimer;
 
-        timer.current = setInterval(callback, 1000)
+        timer.current = setInterval(callback, 1000);
     }
 
     function decrementBlackTimer() {
-        setBlackTime(prev => prev - 1);
+        setBlackTime((prev) => (prev > 0 ? prev - 1 : 0));
     }
 
     function decrementWhiteTimer() {
-        setWhiteTime(prev => prev - 1);
+        setWhiteTime((prev) => (prev > 0 ? prev - 1 : 0));
     }
 
     const handleRestart = () => {
         setBlackTime(300);
         setWhiteTime(300);
-        restart()
-    }
+        restart();
+    };
 
-    return (
-        <div className="timer">
-            <div className="timer__time">
-                <h2>Чёрные - {blackTime}</h2>
-                <h2>Белые - {whiteTime}</h2>
+    return blackTime && whiteTime ? (
+        <div>
+            <div className="timer">
+                <div className="timer__time">
+                    <h2>Чёрные - {blackTime}</h2>
+                    <h2>Белые - {whiteTime}</h2>
+                </div>
+                <div>
+                    <button className="btn" onClick={handleRestart}>
+                        Новая игра
+                    </button>
+                </div>
             </div>
-            <div>
-                <button onClick={handleRestart}>Restart game</button>
+        </div>
+    ) : (
+        <div>
+            <div className="timer">
+                <div className="timer__time">
+                    <h2>Чёрные - {blackTime}</h2>
+                    <h2>Белые - {whiteTime}</h2>
+                </div>
+                <div>
+                    <button className="btn" onClick={handleRestart}>
+                        Новая игра
+                    </button>
+                </div>
             </div>
+            <Modal.Dialog>
+                <Modal.Header>
+                    <Modal.Title>
+                        <b>{blackTime > whiteTime ? "Белые проиграли!" : "Чёрные проиграли!"}</b>
+                    </Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <p>Cыграете ещё одну игру?</p>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button onClick={handleRestart}>Новая игра</Button>
+                </Modal.Footer>
+            </Modal.Dialog>
         </div>
     );
 };
