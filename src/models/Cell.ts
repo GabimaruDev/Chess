@@ -21,15 +21,15 @@ export class Cell {
         this.id = x;
     }
 
-    isEmpty(): boolean {
+    public isEmpty(): boolean {
         return this.figure === null;
     }
 
-    isEnemy(target: Cell): boolean {
+    public isEnemy(target: Cell): boolean {
         return !!target.figure;
     }
 
-    isEmptyVertical(target: Cell): boolean {
+    public isEmptyVertical(target: Cell): boolean {
         if (this.x !== target.x) {
             return false;
         }
@@ -37,7 +37,7 @@ export class Cell {
         const min = Math.min(this.y, target.y);
         const max = Math.max(this.y, target.y);
         for (let y = min + 1; y < max; y++) {
-            if (!this.board.getCell(this.x, y).isEmpty()) {
+            if (!this.board.getCell(y, this.x).isEmpty()) {
                 return false;
             }
         }
@@ -45,7 +45,7 @@ export class Cell {
         return true;
     }
 
-    isEmptyHorizontal(target: Cell): boolean {
+    public isEmptyHorizontal(target: Cell): boolean {
         if (this.y !== target.y) {
             return false;
         }
@@ -53,7 +53,7 @@ export class Cell {
         const min = Math.min(this.x, target.x);
         const max = Math.max(this.x, target.x);
         for (let x = min + 1; x < max; x++) {
-            if (!this.board.getCell(x, this.y).isEmpty()) {
+            if (!this.board.getCell(this.y, x).isEmpty()) {
                 return false;
             }
         }
@@ -61,7 +61,7 @@ export class Cell {
         return true;
     }
 
-    isEmptyDiagonal(target: Cell): boolean {
+    public isEmptyDiagonal(target: Cell): boolean {
         const absX = Math.abs(target.x - this.x);
         const absY = Math.abs(target.y - this.y);
         if (absX !== absY) return false;
@@ -70,18 +70,18 @@ export class Cell {
         const dy = this.y < target.y ? 1 : -1;
 
         for (let i = 1; i < absY; i++) {
-            if (!this.board.getCell(this.x + dx * i, this.y + dy * i).isEmpty()) return false;
+            if (!this.board.getCell(this.y + dy * i, this.x + dx * i).isEmpty()) return false;
         }
 
         return true;
     }
 
-    setFigure(figure: Figure) {
+    private setFigure(figure: Figure) {
         this.figure = figure;
         this.figure.cell = this;
     }
 
-    moveFigure(target: Cell) {
+    public moveFigure(target: Cell) {
         if (this.figure && this.figure.canMove(target)) {
             this.figure.moveFigure();
             if (target.figure) {

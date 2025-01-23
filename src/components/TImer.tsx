@@ -31,13 +31,13 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
 
     function decrementBlackTimer() {
         setBlackTime((prev) => {
-            return Number(prev > 0 ? (prev - 0.1).toFixed(1) : 0)
+            return Number(prev > 0 ? (prev - 0.1).toFixed(1) : 0);
         });
     }
 
     function decrementWhiteTimer() {
         setWhiteTime((prev) => {
-            return Number(prev > 0 ? (prev - 0.1).toFixed(1) : 0)
+            return Number(prev > 0 ? (prev - 0.1).toFixed(1) : 0);
         });
     }
 
@@ -48,25 +48,23 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
     };
 
     return blackTime && whiteTime ? (
-        <div>
-            <div className="timer">
-                <div className="timer__time">
-                    <h2>Чёрные - {blackTime}</h2>
-                    <h2>Белые - {whiteTime}</h2>
-                </div>
-                <div>
-                    <button className="btn" onClick={handleRestart}>
-                        Новая игра
-                    </button>
-                </div>
+        <div className="timer">
+            <div className="timer__time">
+                <h2>Чёрные - {blackTime}</h2>
+                <h2>{whiteTime} - Белые</h2>
+            </div>
+            <div>
+                <button className="btn" onClick={handleRestart}>
+                    Новая игра
+                </button>
             </div>
         </div>
     ) : (
-        <div>
+        <>
             <div className="timer">
                 <div className="timer__time">
                     <h2>Чёрные - {blackTime}</h2>
-                    <h2>Белые - {whiteTime}</h2>
+                    <h2>{whiteTime} - Белые</h2>
                 </div>
                 <div>
                     <button className="btn" onClick={handleRestart}>
@@ -77,7 +75,7 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
             <Modal.Dialog>
                 <Modal.Header>
                     <Modal.Title>
-                        <b>{blackTime > whiteTime ? "Белые проиграли!" : "Чёрные проиграли!"}</b>
+                        <b>{blackTime > whiteTime ? "Чёрные выйграли!" : "Белые выйграли!"}</b>
                     </Modal.Title>
                 </Modal.Header>
 
@@ -89,7 +87,7 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
                     <Button onClick={handleRestart}>Новая игра</Button>
                 </Modal.Footer>
             </Modal.Dialog>
-        </div>
+        </>
     );
 };
 

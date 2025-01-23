@@ -25,24 +25,24 @@ function App() {
     }
 
     function swapPlayer() {
-        setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer);
+        setCurrentPlayer(currentPlayer.color === Colors.WHITE ? blackPlayer : whitePlayer);
     }
 
     return (
         <div className="app">
-            <div className="board-wrapper">
-                <h2>Ход игрока: {currentPlayer?.color == "black" ? "чёрный" : "белый"}</h2>
-                <BoardComponent
-                    board={board}
-                    setBoard={setBoard}
-                    currentPlayer={currentPlayer}
-                    swapPlayer={swapPlayer}
-                />
-                <Timer restart={restart} currentPlayer={currentPlayer} />
-                <div className="lost-wrapper">
-                    <LostFigures title="Чёрные фигуры" figures={board.lostBlackFigures} />
-                    <LostFigures title="Белые фигуры" figures={board.lostWhiteFigures} />
-                </div>
+            <h2 className="turn">
+                Ход игрока: {currentPlayer.color === Colors.BLACK ? "чёрный" : "белый"}
+            </h2>
+            <BoardComponent
+                board={board}
+                setBoard={setBoard}
+                currentPlayer={currentPlayer}
+                swapPlayer={swapPlayer}
+            />
+            <Timer restart={restart} currentPlayer={currentPlayer} />
+            <div className="lost-wrapper">
+                <LostFigures title="Чёрные фигуры" figures={board.lostBlackFigures} />
+                <LostFigures title="Белые фигуры" figures={board.lostWhiteFigures} />
             </div>
         </div>
     );

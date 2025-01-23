@@ -3,11 +3,12 @@ import { Board } from "../models/Board";
 import CellComponent from "./CellComponent";
 import { Cell } from "../models/Cell";
 import { Player } from "../models/Player";
+import { Colors } from "../models/Colors";
 
 interface BoardProps {
     board: Board;
     setBoard: (board: Board) => void;
-    currentPlayer: Player | null;
+    currentPlayer: Player;
     swapPlayer: () => void;
 }
 
@@ -41,7 +42,11 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
     }
 
     return (
-        <div className="board">
+        <div
+            className={[
+                "board",
+                currentPlayer.color === Colors.BLACK ? "swapPlayer" : ""
+            ].join(" ")}>
             {board.cells.map((row, index) => (
                 <React.Fragment key={index}>
                     {row.map((cell) => (
@@ -50,6 +55,7 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
                             cell={cell}
                             selected={cell.x === selectedCell?.x && cell.y === selectedCell?.y}
                             key={cell.id}
+                            currentPlayer={currentPlayer}
                         />
                     ))}
                 </React.Fragment>

@@ -27,12 +27,10 @@ export class Figure {
         this.id = Math.random();
     }
 
-    canMove(target: Cell): boolean {
-        if (target.figure?.color === this.color || target.figure?.name == FigureNames.KING) {
-            return false;
-        }
+    public canMove(target: Cell): boolean {
+        if (target.figure?.color === this.color) return false;
         return true;
     }
 
-    moveFigure() {}
+    public moveFigure() {}
 }

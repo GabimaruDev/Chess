@@ -1,13 +1,16 @@
 import { FC } from "react";
 import { Cell } from "../models/Cell";
+import { Colors } from "../models/Colors";
+import { Player } from "../models/Player";
 
 interface CellProps {
     cell: Cell;
     selected: boolean;
     click: (cell: Cell) => void;
+    currentPlayer: Player;
 }
 
-const CellComponent: FC<CellProps> = ({ cell, selected, click }) => {
+const CellComponent: FC<CellProps> = ({ cell, selected, click, currentPlayer }) => {
     return (
         <div
             className={[
@@ -15,6 +18,7 @@ const CellComponent: FC<CellProps> = ({ cell, selected, click }) => {
                 cell.color,
                 selected ? "selected" : "",
                 cell.avaliable && cell.figure ? "available-enemy" : "",
+                currentPlayer.color === Colors.BLACK ? "swapPlayer" : ""
             ].join(" ")}
             onClick={() => click(cell)}
         >

@@ -1,40 +1,56 @@
+@font-face {
+    font-family: "JosefinSans";
+    src: url("../fonts/JosefinSans-VariableFont_wght.ttf");
+}
+
+@font-face {
+    font-family: "Jost";
+    src: url("../fonts/Jost-VariableFont_wght.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-VariableFont_wght.ttf");
+}
+
 .app {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100svh;
+    gap: 0.75rem;
     color: #fff;
-    background: url("./assets/chess-background.jpg") center / cover;
-    z-index: -2;
+    background: url("../assets/chess-background.jpg") center / cover;
     user-select: none;
+    font-family: "Jost";
 }
 
-.board-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.turn {
+    font-size: 1.75rem;
+    padding: 0.25rem 0 0.25rem;
 }
 
 .board {
-    width: calc(64px * 8);
-    height: calc(64px * 8);
+    width: calc(4rem * 8);
+    height: calc(4rem * 8);
     display: flex;
     flex-wrap: wrap;
-    border: 1px solid #000;
-    filter: drop-shadow(0 0 15px #000);
+    outline: 1px solid #000;
+    filter: drop-shadow(0 0 0.875rem #000);
 }
 
 .cell {
-    width: 64px;
-    height: 64px;
+    width: 4rem;
+    height: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .cell img {
-    width: 48px;
-    height: 48px;
+    width: 3rem;
+    height: 3rem;
     position: relative;
 }
 
@@ -51,36 +67,39 @@
 }
 
 .available {
-    height: 12px;
-    width: 12px;
+    height: 0.75rem;
+    width: 0.75rem;
     border-radius: 50%;
     background-color: rgb(200, 255, 116);
 }
 
 .available-enemy img {
-    filter: drop-shadow(0px 0px 10px red);
+    filter: drop-shadow(0px 0px 0.625rem red);
 }
 
 .lost-wrapper {
     display: flex;
+    gap: 1rem;
 }
 
 .lost {
     display: flex;
     flex-direction: column;
     padding: 1.25rem 1rem;
-    margin: 0.625rem;
     background-color: rgb(120, 120, 120);
 }
 
 .lost__title {
-    margin: 0 0 0.625rem 0;
+    margin-bottom: 0.625rem;
     display: flex;
     justify-content: center;
+    font-size: 1.25rem;
 }
 
 .lost__description {
     display: flex;
+    gap: 0.5rem;
+    font-size: 1.125rem;
 }
 
 .timer {
@@ -88,13 +107,24 @@
     flex-direction: column;
     align-items: center;
     background-color: rgb(120, 120, 120);
-    margin: 0.625rem;
     padding: 0.625rem;
+    min-width: 18rem;
+    gap: 0.625rem;
+    font-size: 1.4375rem;
 }
 
 .timer__time {
     display: flex;
-    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.timer__time h2 {
+    min-width: 10rem;
+}
+
+.timer__time h2:last-child {
+    text-align: end;
 }
 
 .modal-dialog {
@@ -140,32 +170,41 @@
 .btn {
     padding: 0.25rem 0.3rem;
     border: 0;
-    background-color: #ddd;
-    border-radius: 0.2rem;
+    background-color: #ccc;
+    border-radius: 0.375rem;
+    font-size: 1rem;
+}
+
+.btn:hover {
+    background-color: #fff;
+}
+
+.swapPlayer {
+    transform: rotate(180deg);
 }
 
 @media (max-width: 767.98px) {
     .board {
-        width: calc(40px * 8);
-        height: calc(40px * 8);
+        width: calc(2.5rem * 8);
+        height: calc(2.5rem * 8);
     }
 
     .cell {
-        width: 40px;
-        height: 40px;
+        width: 2.5rem;
+        height: 2.5rem;
     }
 
     .cell img {
-        width: 30px;
-        height: 30px;
+        width: 1.875rem;
+        height: 1.875rem;
     }
 
     .available {
-        height: 8px;
-        width: 8px;
+        height: 0.5rem;
+        width: 0.5rem;
     }
 
     .available-enemy img {
-        filter: drop-shadow(0px 0px 6px red);
+        filter: drop-shadow(0px 0px 0.375rem red);
     }
 }
