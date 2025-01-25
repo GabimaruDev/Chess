@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { Board } from "../models/Board";
 import CellComponent from "./CellComponent";
 import { Cell } from "../models/Cell";
@@ -16,7 +16,7 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
     const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
 
     function click(cell: Cell) {
-        if (selectedCell && selectedCell !== cell && selectedCell.figure?.canMove(cell)) {
+        if (selectedCell !== cell && selectedCell?.figure?.canMove(cell)) {
             selectedCell.moveFigure(cell);
             setSelectedCell(null);
             swapPlayer();
@@ -27,26 +27,25 @@ const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPl
         }
     }
 
-    useEffect(() => {
-        highlightCells();
-    }, [selectedCell]);
-
-    function highlightCells() {
-        board.highlightCells(selectedCell);
-        updateBoard();
-    }
-
-    function updateBoard() {
+    const updateBoard = useCallback(() => {
         const newBoard = board.getCopyBoard();
         setBoard(newBoard);
-    }
+    }, [board, setBoard])
+
+    const highlightCells = useCallback(() => {
+        board.highlightCells(selectedCell, currentPlayer.color);
+        updateBoard();
+    }, [board, currentPlayer.color, selectedCell, updateBoard])
+
+    useEffect(() => {
+        highlightCells();
+    }, [highlightCells, selectedCell]);
 
     return (
         <div
-            className={[
-                "board",
-                currentPlayer.color === Colors.BLACK ? "swapPlayer" : ""
-            ].join(" ")}>
+            className={["board", currentPlayer.color === Colors.BLACK ? "swapPlayer" : ""].join(
+                " "
+            )}>
             {board.cells.map((row, index) => (
                 <React.Fragment key={index}>
                     {row.map((cell) => (
