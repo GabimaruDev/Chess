@@ -17,6 +17,7 @@ export class Figure {
     cell: Cell;
     name: FigureNames;
     id: number;
+    isFirstStep: boolean | null = null;
 
     constructor(color: Colors, cell: Cell) {
         this.color = color;
@@ -33,4 +34,8 @@ export class Figure {
     }
 
     public moveFigure() {}
+
+    public firstStep(): boolean | null {
+        return this.isFirstStep;
+    }
 }

@@ -10,11 +10,18 @@ interface BoardProps {
     setBoard: (board: Board) => void;
     currentPlayer: Player;
     swapPlayer: () => void;
+    selectedCell: Cell | null;
+    setSelectedCell: (cell: Cell | null) => void;
 }
 
-const BoardComponent: FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer }) => {
-    const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
-
+const BoardComponent: FC<BoardProps> = ({
+    board,
+    setBoard,
+    currentPlayer,
+    swapPlayer,
+    selectedCell,
+    setSelectedCell,
+}) => {
     function click(cell: Cell) {
         if (selectedCell !== cell && selectedCell?.figure?.canMove(cell)) {
             selectedCell.moveFigure(cell);

@@ -5,6 +5,8 @@ import blackLogo from "../../assets/min-black-rook.png";
 import yellowLogo from "../../assets/min-yellow-rook.png";
 
 export class Rook extends Figure {
+    isFirstStep: boolean = true;
+
     constructor(color: Colors, cell: Cell) {
         super(color, cell);
         this.logo = color === Colors.BLACK ? blackLogo : yellowLogo;
@@ -16,5 +18,13 @@ export class Rook extends Figure {
         if (this.cell.isEmptyVertical(target)) return true;
         if (this.cell.isEmptyHorizontal(target)) return true;
         return false;
+    }
+
+    firstStep(): boolean {
+        return this.isFirstStep;
+    }
+
+    moveFigure(): void {
+        this.isFirstStep = false;
     }
 }

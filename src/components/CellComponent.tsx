@@ -17,12 +17,11 @@ const CellComponent: FC<CellProps> = ({ cell, selected, click, currentPlayer }) 
                 "cell",
                 cell.color,
                 selected ? "selected" : "",
-                cell.avaliable && cell.figure ? "available-enemy" : "",
-                currentPlayer.color === Colors.BLACK ? "swapPlayer" : ""
+                cell.available && cell.figure ? "available-enemy" : "",
+                currentPlayer.color === Colors.BLACK ? "swapPlayer" : "",
             ].join(" ")}
-            onClick={() => click(cell)}
-        >
-            {cell.avaliable && !cell.figure && <div className="available" />}
+            onClick={() => click(cell)}>
+            {cell.available && !cell.figure && <div className="available" />}
             {cell.figure?.logo && <img src={cell.figure.logo} alt="" />}
         </div>
     );

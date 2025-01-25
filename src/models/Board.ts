@@ -1,7 +1,7 @@
 import { Cell } from "./Cell";
 import { Colors } from "./Colors";
 import { Bishop } from "./figures/Bishop";
-import { Figure } from "./figures/Figure";
+import { Figure, FigureNames } from "./figures/Figure";
 import { King } from "./figures/King";
 import { Knight } from "./figures/Knight";
 import { Pawn } from "./figures/Pawn";
@@ -12,6 +12,7 @@ export class Board {
     cells: Cell[][] = [];
     lostBlackFigures: Figure[] = [];
     lostWhiteFigures: Figure[] = [];
+    cell: Cell | undefined;
 
     public initCells() {
         for (let i = 0; i < 8; i++) {
@@ -35,14 +36,99 @@ export class Board {
         return newBoard;
     }
 
-    public highlightCells(selectedCell: Cell | null) {
+    public highlightCells(selectedCell: Cell | null, color: Colors) {
         for (let i = 0; i < this.cells.length; i++) {
             const row = this.cells[i];
             for (let j = 0; j < row.length; j++) {
                 const target = row[j];
-                target.avaliable = !!selectedCell?.figure?.canMove(target);
+                if (selectedCell?.figure?.name === FigureNames.KING) {
+                    if (
+                        target === this.cells[0][2] ||
+                        target === this.cells[0][6] ||
+                        target === this.cells[7][2] ||
+                        target === this.cells[7][6]
+                    ) {
+                        target.available = !!this.castling(target, color);
+                    } else if (this.isCellUnderAttack(target, color)) {
+                        target.available = false;
+                    } else {
+                        target.available = !!selectedCell?.figure?.canMove(target);
+                    }
+                } else {
+                    target.available = !!selectedCell?.figure?.canMove(target);
+                }
             }
         }
+    }
+
+    public castling(target: Cell, color: Colors): boolean {
+        if (color === Colors.BLACK && target.y === 0) {
+            if (
+                target.x === 2 &&
+                !this.cells[0][1].figure &&
+                !this.cells[0][2].figure &&
+                !this.cells[0][3].figure &&
+                this.cells[0][0].figure?.isFirstStep &&
+                this.cells[0][4].figure?.isFirstStep &&
+                !this.isCellUnderAttack(this.getCell(0, 2), color) &&
+                !this.isCellUnderAttack(this.getCell(0, 3), color) &&
+                !this.isCellUnderAttack(this.getCell(0, 4), color)
+            ) {
+                return true;
+            } else if (
+                target.x === 6 &&
+                !this.cells[0][5].figure &&
+                !this.cells[0][6].figure &&
+                this.cells[0][4].figure?.isFirstStep &&
+                this.cells[0][7].figure?.isFirstStep &&
+                !this.isCellUnderAttack(this.getCell(0, 4), color) &&
+                !this.isCellUnderAttack(this.getCell(0, 5), color) &&
+                !this.isCellUnderAttack(this.getCell(0, 6), color)
+            ) {
+                return true;
+            }
+        } else if (color === Colors.WHITE && target.y === 7) {
+            if (
+                target.x === 2 &&
+                !this.cells[7][1].figure &&
+                !this.cells[7][2].figure &&
+                !this.cells[7][3].figure &&
+                this.cells[7][0].figure?.isFirstStep &&
+                this.cells[7][4].figure?.isFirstStep &&
+                !this.isCellUnderAttack(this.getCell(7, 2), color) &&
+                !this.isCellUnderAttack(this.getCell(7, 3), color) &&
+                !this.isCellUnderAttack(this.getCell(7, 4), color)
+            ) {
+                return true;
+            } else if (
+                target.x === 6 &&
+                !this.cells[7][5].figure &&
+                !this.cells[7][6].figure &&
+                this.cells[7][7].figure?.isFirstStep &&
+                this.cells[7][4].figure?.isFirstStep &&
+                !this.isCellUnderAttack(this.getCell(7, 4), color) &&
+                !this.isCellUnderAttack(this.getCell(7, 5), color) &&
+                !this.isCellUnderAttack(this.getCell(7, 6), color)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public isCellUnderAttack(target: Cell, color: Colors): boolean {
+        for (let row = 0; row < 8; row++) {
+            for (let cell = 0; cell < 8; cell++) {
+                if (
+                    this.cells[row][cell].figure?.name !== FigureNames.KING &&
+                    this.cells[row][cell].figure?.color !== color &&
+                    this.cells[row][cell].figure?.canMove(target)
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public getCell(y: number, x: number) {
@@ -50,9 +136,11 @@ export class Board {
     }
 
     public addLostFigure(figure: Figure) {
-        figure.color === Colors.BLACK
-            ? this.lostBlackFigures.push(figure)
-            : this.lostWhiteFigures.push(figure);
+        if (figure.color === Colors.BLACK) {
+            this.lostBlackFigures.push(figure);
+        } else {
+            this.lostWhiteFigures.push(figure);
+        }
     }
 
     private addPawns() {

@@ -1,6 +1,7 @@
 import { Board } from "./Board";
-import { Figure } from "./figures/Figure";
+import { Figure, FigureNames } from "./figures/Figure";
 import { Colors } from "./Colors";
+import { Rook } from "./figures/Rook";
 
 export class Cell {
     readonly x: number;
@@ -8,7 +9,7 @@ export class Cell {
     readonly color: Colors;
     figure: Figure | null;
     board: Board;
-    avaliable: boolean;
+    available: boolean;
     id: number;
 
     constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
@@ -17,8 +18,15 @@ export class Cell {
         this.y = y;
         this.color = color;
         this.figure = figure;
-        this.avaliable = false;
+        this.available = false;
         this.id = x;
+    }
+
+    public isFirstStep(y: Cell["y"], x: Cell["x"]): boolean {
+        if (this.board.getCell(y, x).figure?.firstStep()) {
+            return true;
+        }
+        return false;
     }
 
     public isEmpty(): boolean {
@@ -89,6 +97,54 @@ export class Cell {
             }
             target.setFigure(this.figure);
             this.figure = null;
+        } else if (this.figure?.name === FigureNames.KING) {
+            if (this.figure?.color === Colors.BLACK) {
+                if (
+                    target === this.board.cells[0][2]
+                ) {
+                    target.setFigure(this.figure);
+                    this.figure = null;
+                    this.board.cells[0][0].figure = null;
+                    new Rook(Colors.BLACK, this.board.cells[0][3]);
+                } else if (
+                    target === this.board.cells[0][6]
+                ) {
+                    target.setFigure(this.figure);
+                    this.figure = null;
+                    this.board.cells[0][7].figure = null;
+                    new Rook(Colors.BLACK, this.board.cells[0][5]);
+                } else {
+                    this.figure.moveFigure();
+                    if (target.figure) {
+                        this.board.addLostFigure(target.figure);
+                    }
+                    target.setFigure(this.figure);
+                    this.figure = null;
+                }
+            } else if (this.figure?.color === Colors.WHITE) {
+                if (
+                    target === this.board.cells[7][2]
+                ) {
+                    target.setFigure(this.figure);
+                    this.figure = null;
+                    this.board.cells[7][0].figure = null;
+                    new Rook(Colors.WHITE, this.board.cells[7][3]);
+                } else if (
+                    target === this.board.cells[7][6]
+                ) {
+                    target.setFigure(this.figure);
+                    this.figure = null;
+                    this.board.cells[7][7].figure = null;
+                    new Rook(Colors.WHITE, this.board.cells[7][5]);
+                } else {
+                    this.figure.moveFigure();
+                    if (target.figure) {
+                        this.board.addLostFigure(target.figure);
+                    }
+                    target.setFigure(this.figure);
+                    this.figure = null;
+                }
+            }
         }
     }
 }
