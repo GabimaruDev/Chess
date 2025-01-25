@@ -20,7 +20,8 @@ function App() {
         newBoard.addFigures();
         setBoard(newBoard);
         setCurrentPlayer(whitePlayer);
-    }, [whitePlayer])
+        setSelectedCell(null);
+    }, [whitePlayer]);
 
     useEffect(() => {
         restart();
