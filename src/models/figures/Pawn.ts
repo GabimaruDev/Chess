@@ -13,7 +13,7 @@ export class Pawn extends Figure {
         this.name = FigureNames.PAWN;
     }
 
-    canMove(target: Cell): boolean {
+    canMove(target: Cell, checkingForAttack = false): boolean {
         if (!super.canMove(target)) return false;
         const direction = this.cell.figure?.color == Colors.BLACK ? 1 : -1;
         const firstStepDirection = this.cell.figure?.color == Colors.BLACK ? 2 : -2;
@@ -24,7 +24,7 @@ export class Pawn extends Figure {
                 target.y === this.cell.y + firstStepDirection &&
                 this.cell.isEmptyVertical(target)) ||
                 target.y === this.cell.y + direction) &&
-            this.cell.board.getCell(target.y, target.x).isEmpty()
+            this.cell.board.getCell(target.y, target.x).isEmpty() && !checkingForAttack
         ) {
             return true;
         }
@@ -32,7 +32,7 @@ export class Pawn extends Figure {
         if (
             (target.x === this.cell.x - 1 || target.x === this.cell.x + 1) &&
             target.y === this.cell.y + direction &&
-            this.cell.isEnemy(target)
+            (this.cell.isEnemy(target) || checkingForAttack)
         ) {
             return true;
         }
