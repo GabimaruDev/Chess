@@ -47,7 +47,7 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
         restart();
     }
 
-    return blackTime && whiteTime ? (
+    return blackTime > 0.1 && whiteTime > 0.1 ? (
         <div className="timer">
             <div className="timer__time">
                 <h2>Чёрные - {blackTime}</h2>
