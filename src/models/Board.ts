@@ -43,10 +43,11 @@ export class Board {
                 const target = row[j];
                 if (selectedCell?.figure?.name === FigureNames.KING) {
                     if (
-                        target === this.cells[0][2] ||
-                        target === this.cells[0][6] ||
-                        target === this.cells[7][2] ||
-                        target === this.cells[7][6]
+                        selectedCell?.figure?.firstStep() &&
+                        (target === this.cells[0][2] ||
+                            target === this.cells[0][6] ||
+                            target === this.cells[7][2] ||
+                            target === this.cells[7][6])
                     ) {
                         target.available = !!this.castling(target, color);
                     } else if (this.isCellUnderAttack(target, color)) {
