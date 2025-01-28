@@ -25,7 +25,7 @@ function App() {
 
     useEffect(() => {
         restart();
-    }, [restart]);
+    }, []);
 
     function swapPlayer() {
         setCurrentPlayer(currentPlayer.color === Colors.WHITE ? blackPlayer : whitePlayer);

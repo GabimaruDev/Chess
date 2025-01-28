@@ -90,25 +90,14 @@ export class Cell {
     }
 
     public moveFigure(target: Cell) {
-        if (this.figure && this.figure.canMove(target)) {
-            this.figure.moveFigure();
-            if (target.figure) {
-                this.board.addLostFigure(target.figure);
-            }
-            target.setFigure(this.figure);
-            this.figure = null;
-        } else if (this.figure?.name === FigureNames.KING) {
+        if (this.figure?.name === FigureNames.KING) {
             if (this.figure?.color === Colors.BLACK) {
-                if (
-                    target === this.board.cells[0][2]
-                ) {
+                if (target === this.board.cells[0][2]) {
                     target.setFigure(this.figure);
                     this.figure = null;
                     this.board.cells[0][0].figure = null;
                     new Rook(Colors.BLACK, this.board.cells[0][3]);
-                } else if (
-                    target === this.board.cells[0][6]
-                ) {
+                } else if (target === this.board.cells[0][6]) {
                     target.setFigure(this.figure);
                     this.figure = null;
                     this.board.cells[0][7].figure = null;
@@ -122,16 +111,12 @@ export class Cell {
                     this.figure = null;
                 }
             } else if (this.figure?.color === Colors.WHITE) {
-                if (
-                    target === this.board.cells[7][2]
-                ) {
+                if (target === this.board.cells[7][2]) {
                     target.setFigure(this.figure);
                     this.figure = null;
                     this.board.cells[7][0].figure = null;
                     new Rook(Colors.WHITE, this.board.cells[7][3]);
-                } else if (
-                    target === this.board.cells[7][6]
-                ) {
+                } else if (target === this.board.cells[7][6]) {
                     target.setFigure(this.figure);
                     this.figure = null;
                     this.board.cells[7][7].figure = null;
@@ -145,6 +130,13 @@ export class Cell {
                     this.figure = null;
                 }
             }
+        } else if (this.figure?.canMove(target)) {
+            this.figure.moveFigure();
+            if (target.figure) {
+                this.board.addLostFigure(target.figure);
+            }
+            target.setFigure(this.figure);
+            this.figure = null;
         }
     }
 }

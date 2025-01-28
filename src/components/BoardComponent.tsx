@@ -34,19 +34,14 @@ const BoardComponent: FC<BoardProps> = ({
         }
     }
 
-    const updateBoard = useCallback(() => {
-        const newBoard = board.getCopyBoard();
-        setBoard(newBoard);
-    }, [board, setBoard])
-
     const highlightCells = useCallback(() => {
         board.highlightCells(selectedCell, currentPlayer.color);
-        updateBoard();
-    }, [board, currentPlayer.color, selectedCell, updateBoard])
+        setBoard(board.getCopyBoard());
+    }, [selectedCell]);
 
     useEffect(() => {
         highlightCells();
-    }, [highlightCells, selectedCell]);
+    }, [selectedCell]);
 
     return (
         <div

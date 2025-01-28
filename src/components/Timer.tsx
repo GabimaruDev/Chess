@@ -10,8 +10,8 @@ interface TimerProps {
 }
 
 const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
-    const [blackTime, setBlackTime] = useState(300);
-    const [whiteTime, setWhiteTime] = useState(300);
+    const [blackTime, setBlackTime] = useState<any>(300);
+    const [whiteTime, setWhiteTime] = useState<any>(300);
     const timer = useRef<null | ReturnType<typeof setInterval>>(null);
 
     const startTimer = useCallback(() => {
@@ -23,35 +23,35 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
             currentPlayer?.color === Colors.WHITE ? decrementWhiteTimer : decrementBlackTimer;
 
         timer.current = setInterval(callback, 100);
-    }, [currentPlayer?.color])
+    }, [currentPlayer?.color]);
 
     useEffect(() => {
         startTimer();
-    }, [currentPlayer, startTimer]);
+    }, [currentPlayer]);
 
     function decrementBlackTimer() {
-        setBlackTime((prev) => {
-            return prev > 0 ? prev - 0.1 : 0;
+        setBlackTime((prev: number) => {
+            return (prev > 0 ? prev - 0.1 : 0).toFixed(1);
         });
     }
 
     function decrementWhiteTimer() {
-        setWhiteTime((prev) => {
-            return prev > 0 ? prev - 0.1 : 0;
+        setWhiteTime((prev: number) => {
+            return (prev > 0 ? prev - 0.1 : 0).toFixed(1);
         });
     }
 
-    const handleRestart = () => {
+    function handleRestart() {
         setBlackTime(300);
         setWhiteTime(300);
         restart();
-    };
+    }
 
     return blackTime && whiteTime ? (
         <div className="timer">
             <div className="timer__time">
-                <h2>Чёрные - {blackTime.toFixed(1)}</h2>
-                <h2>{whiteTime.toFixed(1)} - Белые</h2>
+                <h2>Чёрные - {blackTime}</h2>
+                <h2>{whiteTime} - Белые</h2>
             </div>
             <div>
                 <button className="btn" onClick={handleRestart}>
@@ -63,8 +63,8 @@ const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
         <>
             <div className="timer">
                 <div className="timer__time">
-                    <h2>Чёрные - {blackTime.toFixed(1)}</h2>
-                    <h2>{whiteTime.toFixed(1)} - Белые</h2>
+                    <h2>Чёрные - {blackTime}</h2>
+                    <h2>{whiteTime} - Белые</h2>
                 </div>
                 <div>
                     <button className="btn" onClick={handleRestart}>
