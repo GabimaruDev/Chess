@@ -1,16 +1,16 @@
 @font-face {
     font-family: "JosefinSans";
-    src: url("./fonts/JosefinSans-VariableFont_wght.ttf");
+    src: url("../fonts/JosefinSans-VariableFont_wght.ttf");
 }
 
 @font-face {
     font-family: "Jost";
-    src: url("./fonts/Jost-VariableFont_wght.ttf");
+    src: url("../fonts/Jost-VariableFont_wght.ttf");
 }
 
 @font-face {
     font-family: "Montserrat";
-    src: url("./fonts/Montserrat-VariableFont_wght.ttf");
+    src: url("../fonts/Montserrat-VariableFont_wght.ttf");
 }
 
 .app {
@@ -21,7 +21,7 @@
     min-height: 100svh;
     gap: 0.75rem;
     color: #fff;
-    background: url("../assets/chess-background.jpg") center / cover;
+    background: url("../images/chess-background.jpg") center / cover;
     user-select: none;
     font-family: "Jost";
 }
@@ -137,6 +137,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 1.25rem;
 }
 
 .modal-content {
@@ -167,7 +168,7 @@
     gap: 0.75rem;
 }
 
-.btn {
+.button {
     padding: 0.25rem 0.3rem;
     border: 0;
     background-color: #ccc;
@@ -175,7 +176,7 @@
     font-size: 1rem;
 }
 
-.btn:hover {
+.button:hover {
     background-color: #fff;
 }
 

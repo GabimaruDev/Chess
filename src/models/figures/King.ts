@@ -1,8 +1,8 @@
 import { Figure, FigureNames } from "./Figure";
 import { Colors } from "../Colors";
 import { Cell } from "../Cell";
-import blackLogo from "../../assets/min-black-king.png";
-import yellowLogo from "../../assets/min-yellow-king.png";
+import blackLogo from "../../assets/images/min-black-king.png";
+import yellowLogo from "../../assets/images/min-yellow-king.png";
 
 export class King extends Figure {
     isFirstStep: boolean = true;
