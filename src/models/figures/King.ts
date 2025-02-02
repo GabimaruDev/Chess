@@ -14,20 +14,17 @@ export class King extends Figure {
     }
 
     canMove(target: Cell, checkingForAttack = false): boolean {
-        if (!super.canMove(target)) return false;
-        if (this.cell.board.castling(target, this.color)) return true;
-
-        if (!checkingForAttack && this.cell.board.isCellUnderAttack(target, this.color)) {
+        if (!super.canMove(target)) {
             return false;
+        } else if (this.cell.board.castling(target, this.color)) {
+            return true;
+        } else if (!checkingForAttack && this.cell.board.isCellUnderAttack(target, this.color)) {
+            return false;
+        } else {
+            const dx = Math.abs(this.cell.x - target.x);
+            const dy = Math.abs(this.cell.y - target.y);
+            return dx <= 1 && dy <= 1;
         }
-
-        const dx = Math.abs(this.cell.x - target.x);
-        const dy = Math.abs(this.cell.y - target.y);
-        return dx <= 1 && dy <= 1;
-    }
-
-    firstStep(): boolean {
-        return this.isFirstStep;
     }
 
     moveFigure(): void {
