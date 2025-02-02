@@ -21,7 +21,7 @@ function App() {
         setBoard(newBoard);
         setCurrentPlayer(whitePlayer);
         setSelectedCell(null);
-    }, [whitePlayer]);
+    }, []);
 
     useEffect(() => {
         restart();
