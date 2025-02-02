@@ -12,7 +12,7 @@ export class Board {
     cells: Cell[][] = [];
     lostBlackFigures: Figure[] = [];
     lostWhiteFigures: Figure[] = [];
-    cell: Cell | undefined;
+    advancedPawnCell: Cell | null = null;
 
     public initCells() {
         for (let i = 0; i < 8; i++) {
@@ -33,6 +33,7 @@ export class Board {
         newBoard.cells = this.cells;
         newBoard.lostWhiteFigures = this.lostWhiteFigures;
         newBoard.lostBlackFigures = this.lostBlackFigures;
+        newBoard.advancedPawnCell = this.advancedPawnCell;
         return newBoard;
     }
 
