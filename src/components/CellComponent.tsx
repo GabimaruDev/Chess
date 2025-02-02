@@ -10,7 +10,8 @@ interface CellProps {
     currentPlayer: Player;
 }
 
-const CellComponent: FC<CellProps> = ({ cell, selected, click, currentPlayer }) => {
+const CellComponent: FC<CellProps> = (props) => {
+    const { cell, selected, click, currentPlayer } = props;
     return (
         <div
             className={[
@@ -20,7 +21,8 @@ const CellComponent: FC<CellProps> = ({ cell, selected, click, currentPlayer }) 
                 cell.available && cell.figure ? "available-enemy" : "",
                 currentPlayer.color === Colors.BLACK ? "swapPlayer" : "",
             ].join(" ")}
-            onClick={() => click(cell)}>
+            onClick={() => click(cell)}
+        >
             {cell.available && !cell.figure && <div className="available" />}
             {cell.figure?.logo && <img src={cell.figure.logo} alt="" />}
         </div>

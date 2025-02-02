@@ -6,7 +6,8 @@ interface LostFiguresProps {
     figures: Figure[];
 }
 
-const LostFigures: FC<LostFiguresProps> = ({ title, figures }) => {
+const LostFigures: FC<LostFiguresProps> = (props) => {
+    const { title, figures } = props;
     return (
         <div className="lost">
             <h3 className="lost__title">{title}</h3>

@@ -1,8 +1,7 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Player } from "../models/Player";
 import { Colors } from "../models/Colors";
-import { Button } from "react-bootstrap";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 
 interface TimerProps {
     currentPlayer: Player;
@@ -12,6 +11,8 @@ interface TimerProps {
 const Timer: FC<TimerProps> = ({ currentPlayer, restart }) => {
     const [blackTime, setBlackTime] = useState<any>(300);
     const [whiteTime, setWhiteTime] = useState<any>(300);
+const Timer: FC<TimerProps> = (props) => {
+    const { currentPlayer, restart } = props;
     const timer = useRef<null | ReturnType<typeof setInterval>>(null);
 
     const startTimer = useCallback(() => {
