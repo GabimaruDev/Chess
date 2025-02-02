@@ -43,7 +43,7 @@ export class Board {
                 const target = row[j];
                 if (selectedCell?.figure?.name === FigureNames.KING) {
                     if (
-                        selectedCell?.figure?.firstStep() &&
+                        selectedCell?.figure?.hasFirstStep() &&
                         (target === this.cells[0][2] ||
                             target === this.cells[0][6] ||
                             target === this.cells[7][2] ||

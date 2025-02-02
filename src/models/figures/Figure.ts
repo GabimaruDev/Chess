@@ -1,7 +1,7 @@
 import { Colors } from "../Colors";
 import { Cell } from "../Cell";
 
-export enum FigureNames {
+export const enum FigureNames {
     "FIGURE" = "Фигура",
     "KING" = "Король",
     "QUEEN" = "Ферзь",
@@ -35,7 +35,7 @@ export class Figure {
 
     public moveFigure() {}
 
-    public firstStep(): boolean | null {
+    public hasFirstStep(): boolean | null {
         return this.isFirstStep;
     }
 }

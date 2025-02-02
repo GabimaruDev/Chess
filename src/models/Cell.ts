@@ -23,10 +23,11 @@ export class Cell {
     }
 
     public isFirstStep(y: Cell["y"], x: Cell["x"]): boolean {
-        if (this.board.getCell(y, x).figure?.firstStep()) {
+        if (this.board.getCell(y, x).figure?.hasFirstStep()) {
             return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public isEmpty(): boolean {
@@ -76,7 +77,6 @@ export class Cell {
 
         const dx = this.x < target.x ? 1 : -1;
         const dy = this.y < target.y ? 1 : -1;
-
         for (let i = 1; i < absY; i++) {
             if (!this.board.getCell(this.y + dy * i, this.x + dx * i).isEmpty()) return false;
         }
