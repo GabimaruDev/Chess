@@ -20,10 +20,6 @@ export class Rook extends Figure {
         return false;
     }
 
-    firstStep(): boolean {
-        return this.isFirstStep;
-    }
-
     moveFigure(): void {
         this.isFirstStep = false;
     }
