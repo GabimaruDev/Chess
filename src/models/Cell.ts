@@ -1,6 +1,6 @@
 import { Board } from "./Board";
-import { Figure, FigureNames } from "./figures/Figure";
 import { Colors } from "./Colors";
+import { Figure, FigureNames } from "./figures/Figure";
 import { Rook } from "./figures/Rook";
 
 export class Cell {
@@ -23,11 +23,7 @@ export class Cell {
     }
 
     public isFirstStep(y: Cell["y"], x: Cell["x"]): boolean {
-        if (this.board.getCell(y, x).figure?.hasFirstStep()) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.board.getCell(y, x).figure?.hasFirstStep() || false;
     }
 
     public isEmpty(): boolean {

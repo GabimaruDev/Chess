@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { Player } from "../models/Player";
 import { Colors } from "../models/Colors";
-import { Button, Modal } from "react-bootstrap";
+import { Player } from "../models/Player";
+import ModalWindow from "./ModalWindow";
 
 interface TimerProps {
     currentPlayer: Player;
@@ -48,6 +48,14 @@ const Timer: FC<TimerProps> = (props) => {
         restart();
     }
 
+    const title = blackTime > whiteTime ? "Чёрные выйграли!" : "Белые выйграли!";
+    const body = "Cыграете ещё одну игру?";
+    const footer = (
+        <button className="btn" onClick={handleRestart}>
+            Новая игра
+        </button>
+    );
+
     return (
         <div className="timer">
             <div className="timer__time">
@@ -55,28 +63,12 @@ const Timer: FC<TimerProps> = (props) => {
                 <h2>{whiteTime.toFixed(1)} - Белые</h2>
             </div>
             <div>
-                <button className="button" onClick={handleRestart}>
+                <button className="btn" onClick={handleRestart}>
                     Новая игра
                 </button>
             </div>
             {blackTime < 0.1 || whiteTime < 0.1 ? (
-                <Modal.Dialog>
-                    <Modal.Header>
-                        <Modal.Title>
-                            <b>{blackTime > whiteTime ? "Чёрные выйграли!" : "Белые выйграли!"}</b>
-                        </Modal.Title>
-                    </Modal.Header>
-
-                    <Modal.Body>
-                        <p>Cыграете ещё одну игру?</p>
-                    </Modal.Body>
-
-                    <Modal.Footer>
-                        <Button className="button" onClick={handleRestart}>
-                            Новая игра
-                        </Button>
-                    </Modal.Footer>
-                </Modal.Dialog>
+                <ModalWindow title={title} body={body} footer={footer} />
             ) : (
                 ""
             )}

@@ -42,24 +42,28 @@ export class Board {
             const row = this.cells[i];
             for (let j = 0; j < row.length; j++) {
                 const target = row[j];
-                if (selectedCell?.figure?.name === FigureNames.KING) {
-                    if (
-                        selectedCell?.figure?.hasFirstStep() &&
-                        (target === this.cells[0][2] ||
-                            target === this.cells[0][6] ||
-                            target === this.cells[7][2] ||
-                            target === this.cells[7][6])
-                    ) {
-                        target.available = !!this.castling(target, color);
-                    } else if (this.isCellUnderAttack(target, color)) {
-                        target.available = false;
-                    } else {
-                        target.available = !!selectedCell?.figure?.canMove(target);
-                    }
-                } else {
-                    target.available = !!selectedCell?.figure?.canMove(target);
-                }
+                target.available = this.isAvailableHighlight(selectedCell, target, color);
             }
+        }
+    }
+
+    private isAvailableHighlight(selectedCell: Cell | null, target: Cell, color: Colors): boolean {
+        if (selectedCell?.figure?.name === FigureNames.KING) {
+            if (
+                selectedCell?.figure?.hasFirstStep() &&
+                (target === this.cells[0][2] ||
+                    target === this.cells[0][6] ||
+                    target === this.cells[7][2] ||
+                    target === this.cells[7][6])
+            ) {
+                return !!this.castling(target, color);
+            } else if (this.isCellUnderAttack(target, color)) {
+                return false;
+            } else {
+                return !!selectedCell?.figure?.canMove(target);
+            }
+        } else {
+            return !!selectedCell?.figure?.canMove(target);
         }
     }
 
