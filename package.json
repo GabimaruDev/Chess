@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://iamgabimaru.github.io/React-TS_Chess",
+  "homepage": "https://gabimarudev.github.io/Chess",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

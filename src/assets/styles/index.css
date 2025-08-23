@@ -1,5 +1,5 @@
-@import url("./assets/styles/reset.css");
-@import url("./assets/styles/normalize.css");
+@import url("./reset.css");
+@import url("./normalize.css");
 
 @font-face {
     font-family: "JosefinSans";
@@ -77,6 +77,23 @@
 
 .available-enemy img {
     filter: drop-shadow(0px 0px 0.625rem red);
+}
+
+.check {
+    background-color: #ff4444;
+    animation: check-pulse 1s infinite;
+}
+
+@keyframes check-pulse {
+    0% {
+        background-color: #ff4444;
+    }
+    50% {
+        background-color: #ff6666;
+    }
+    100% {
+        background-color: #ff4444;
+    }
 }
 
 .lost-wrapper {
