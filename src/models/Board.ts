@@ -13,7 +13,6 @@ export class Board {
     cells: Cell[][] = [];
     lostBlackFigures: Figure[] = [];
     lostWhiteFigures: Figure[] = [];
-    advancedPawnCell: Cell | null = null;
 
     public initCells(): void {
         this.cells = Array.from({ length: 8 }, (_, y) =>
@@ -28,7 +27,6 @@ export class Board {
         newBoard.cells = this.cells;
         newBoard.lostWhiteFigures = this.lostWhiteFigures;
         newBoard.lostBlackFigures = this.lostBlackFigures;
-        newBoard.advancedPawnCell = this.advancedPawnCell;
         return newBoard;
     }
 

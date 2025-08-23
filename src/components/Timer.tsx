@@ -1,23 +1,53 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hook";
+import { Board } from "../models/Board";
 import { Colors } from "../models/Colors";
-import { TimerProps } from "../types";
+import { Player } from "../models/Player";
+import { setBoard, swapPlayer } from "../store/slices";
 import ModalWindow from "./ModalWindow";
 
-const Timer: FC<TimerProps> = (props) => {
-    const {
-        currentPlayer,
-        restart,
-        isPaused,
-        isCheckmate,
-        isStalemate,
-        winner,
-        isStartGame,
-        initGame,
-    } = props;
-
+const Timer = () => {
+    const gameState = useAppSelector((state) => state.chess);
+    const dispatch = useAppDispatch();
+    const [isStartGame, setIsStartGame] = useState(true);
+    const [isTimerPaused, setIsTimerPaused] = useState(true);
     const [blackTime, setBlackTime] = useState(300);
     const [whiteTime, setWhiteTime] = useState(300);
     const timer = useRef<null | ReturnType<typeof setInterval>>(null);
+
+    const startGame = useCallback(() => {
+        setIsStartGame(false);
+        setIsTimerPaused(false);
+    }, []);
+
+    const restart = useCallback(() => {
+        const newBoard = new Board();
+        newBoard.initCells();
+        newBoard.addFigures();
+        dispatch(setBoard(newBoard));
+        setIsStartGame(true);
+        setIsTimerPaused(true);
+        if (gameState.currentPlayer.color === Colors.BLACK) {
+            dispatch(swapPlayer(new Player(Colors.WHITE)));
+        }
+    }, []);
+
+    useEffect(() => {
+        restart();
+    }, []);
+
+    useEffect(() => {
+        if (
+            gameState.isCheckmate ||
+            gameState.isStalemate ||
+            gameState.advancedPawnCell ||
+            isStartGame
+        )
+            setIsTimerPaused(true);
+        else {
+            setIsTimerPaused(false);
+        }
+    }, [gameState.isCheckmate, gameState.isStalemate, gameState.advancedPawnCell, isStartGame]);
 
     const stopTimer = useCallback(() => {
         if (timer.current) {
@@ -30,24 +60,25 @@ const Timer: FC<TimerProps> = (props) => {
         if (timer.current) {
             clearInterval(timer.current);
         }
-
-        if (isPaused) {
+        if (isTimerPaused) {
             return;
         }
 
         timer.current = setInterval(
-            currentPlayer?.color === Colors.WHITE ? decrementWhiteTimer : decrementBlackTimer,
+            gameState.currentPlayer?.color === Colors.WHITE
+                ? decrementWhiteTimer
+                : decrementBlackTimer,
             100
         );
-    }, [currentPlayer?.color, isPaused]);
+    }, [gameState.currentPlayer?.color, isTimerPaused]);
 
     useEffect(() => {
-        if (isPaused) {
+        if (isTimerPaused) {
             stopTimer();
         } else {
             startTimer();
         }
-    }, [currentPlayer, startTimer, isPaused, stopTimer]);
+    }, [gameState.currentPlayer, startTimer, isTimerPaused, stopTimer]);
 
     function decrementBlackTimer() {
         setBlackTime((prev) => {
@@ -75,7 +106,9 @@ const Timer: FC<TimerProps> = (props) => {
         </button>
     );
 
-    const checkmateTitle = `Мат! ${winner?.color === Colors.BLACK ? "Чёрные" : "Белые"} выиграли!`;
+    const checkmateTitle = `Мат! ${
+        gameState.winner?.color === Colors.BLACK ? "Чёрные" : "Белые"
+    } выиграли!`;
     const checkmateBody = "Сыграете ещё одну игру?";
     const checkmateFooter = (
         <button className="btn" onClick={handleRestart}>
@@ -97,7 +130,7 @@ const Timer: FC<TimerProps> = (props) => {
         <button
             className="btn"
             onClick={function () {
-                initGame();
+                startGame();
                 setBlackTime(300);
                 setWhiteTime(300);
             }}
@@ -117,13 +150,15 @@ const Timer: FC<TimerProps> = (props) => {
                     Новая игра
                 </button>
             </div>
-            {(blackTime < 0.1 || whiteTime < 0.1) && !isCheckmate && !isStalemate && (
-                <ModalWindow title={timeUpTitle} body={timeUpBody} footer={timeUpFooter} />
-            )}
-            {isCheckmate && (
+            {(blackTime < 0.1 || whiteTime < 0.1) &&
+                !gameState.isCheckmate &&
+                !gameState.isStalemate && (
+                    <ModalWindow title={timeUpTitle} body={timeUpBody} footer={timeUpFooter} />
+                )}
+            {gameState.isCheckmate && (
                 <ModalWindow title={checkmateTitle} body={checkmateBody} footer={checkmateFooter} />
             )}
-            {isStalemate && (
+            {gameState.isStalemate && (
                 <ModalWindow title={stalemateTitle} body={stalemateBody} footer={stalemateFooter} />
             )}
             {isStartGame && (
