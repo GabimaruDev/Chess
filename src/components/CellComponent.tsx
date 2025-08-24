@@ -1,7 +1,8 @@
 import { FC } from "react";
 import { useAppSelector } from "../hook";
+import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
-import { CellComponentProps, Colors } from "../types";
+import { CellComponentProps } from "../types";
 
 const CellComponent: FC<CellComponentProps> = (props) => {
     const { cell, selected, click } = props;

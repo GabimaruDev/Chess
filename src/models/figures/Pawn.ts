@@ -1,7 +1,7 @@
 import blackLogo from "../../assets/images/min-black-pawn.png";
 import yellowLogo from "../../assets/images/min-yellow-pawn.png";
 import { Cell } from "../Cell";
-import { Colors } from "../../types";
+import { Colors } from "../Colors";
 import { Figure, FigureNames } from "./Figure";
 
 export class Pawn extends Figure {

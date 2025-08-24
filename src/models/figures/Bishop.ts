@@ -1,8 +1,8 @@
+import { Figure, FigureNames } from "./Figure";
+import { Colors } from "../Colors";
+import { Cell } from "../Cell";
 import blackLogo from "../../assets/images/min-black-bishop.png";
 import yellowLogo from "../../assets/images/min-yellow-bishop.png";
-import { Colors } from "../../types";
-import { Cell } from "../Cell";
-import { Figure, FigureNames } from "./Figure";
 
 export class Bishop extends Figure {
     constructor(color: Colors, cell: Cell) {

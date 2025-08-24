@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Board } from "../models/Board";
 import { Cell } from "../models/Cell";
+import { Colors } from "../models/Colors";
 import { Player } from "../models/Player";
-import { Colors, GameState } from "../types";
+import { GameState } from "../types";
 
 const initialState: GameState = {
   board: new Board(),
@@ -20,14 +21,14 @@ const slice = createSlice({
   name: "chess",
   initialState,
   reducers: {
+    setBoard: (state, action: PayloadAction<Board>) => {
+      state.board = action.payload;
+    },
     swapPlayer: (state, action: PayloadAction<Player>) => {
       state.currentPlayer = action.payload;
     },
     setSelectedCell: (state, action: PayloadAction<Cell | null>) => {
       state.selectedCell = action.payload;
-    },
-    setBoard: (state, action: PayloadAction<Board>) => {
-      state.board = action.payload;
     },
     setGameStatus: (
       state,

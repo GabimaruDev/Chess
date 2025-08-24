@@ -43,8 +43,3 @@ export interface GameState {
     isCheckmate: boolean;
     isStalemate: boolean;
 }
-
-export const enum Colors {
-    WHITE = "white",
-    BLACK = "black",
-}

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hook";
 import { Cell } from "../models/Cell";
+import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
 import { Player } from "../models/Player";
 import { setBoard, setSelectedCell, swapPlayer } from "../store/slices";
-import { Colors } from "../types";
 import CellComponent from "./CellComponent";
 import ModalTransformPawn from "./ModalTransformPawn";
 
@@ -88,7 +88,9 @@ const BoardComponent = () => {
                     </React.Fragment>
                 ))}
             </div>
-            {gameState.advancedPawnCell && <ModalTransformPawn updateBoard={updateBoard} />}
+            {gameState.advancedPawnCell && (
+                <ModalTransformPawn board={gameState.board} updateBoard={updateBoard} />
+            )}
         </>
     );
 };

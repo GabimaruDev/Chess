@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hook";
 import { Board } from "../models/Board";
+import { Colors } from "../models/Colors";
 import { Player } from "../models/Player";
 import { setBoard, swapPlayer } from "../store/slices";
-import { Colors } from "../types";
 import ModalWindow from "./ModalWindow";
 
 const Timer = () => {
