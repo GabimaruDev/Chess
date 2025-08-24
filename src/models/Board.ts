@@ -43,10 +43,6 @@ export class Board {
     private isAvailableHighlight(selectedCell: Cell | null, target: Cell, color: Colors): boolean {
         if (!selectedCell?.figure) return false;
 
-        if (!selectedCell.figure.canMove(target)) {
-            return false;
-        }
-
         if (selectedCell.figure.name === FigureNames.KING) {
             return this.handleKingHighlight(selectedCell, target, color);
         }
@@ -190,19 +186,11 @@ export class Board {
     }
 
     public isCheckmate(color: Colors): boolean {
-        if (!this.isKingInCheck(color)) {
-            return false;
-        }
-
-        return !this.hasValidMoves(color);
+        return this.isKingInCheck(color) && !this.hasValidMoves(color);
     }
 
     public isStalemate(color: Colors): boolean {
-        if (this.isKingInCheck(color)) {
-            return false;
-        }
-
-        return !this.hasValidMoves(color);
+        return !this.isKingInCheck(color) && !this.hasValidMoves(color);
     }
 
     private findKing(color: Colors): Figure | null {
@@ -219,11 +207,17 @@ export class Board {
     private hasValidMoves(color: Colors): boolean {
         for (const row of this.cells) {
             for (const cell of row) {
-                if (cell.figure?.color === color) {
-                    for (const targetRow of this.cells) {
-                        for (const targetCell of targetRow) {
-                            if (this.isValidMove(cell.figure!, targetCell)) {
-                                return true;
+                const figure = cell.figure;
+                if (figure?.color === color) {
+                    for (let dy = -1; dy <= 1; dy++) {
+                        for (let dx = -1; dx <= 1; dx++) {
+                            const y = cell.y + dy;
+                            const x = cell.x + dx;
+                            if (y >= 0 && y < 8 && x >= 0 && x < 8) {
+                                const target = this.getCell(y, x);
+                                if (this.isMoveSafe(figure, target)) {
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -233,19 +227,12 @@ export class Board {
         return false;
     }
 
-    private isValidMove(figure: Figure, targetCell: Cell): boolean {
-        if (!figure.canMove(targetCell)) {
-            return false;
-        }
-
-        return this.isMoveSafe(figure, targetCell);
-    }
-
     private isMoveSafe(figure: Figure, targetCell: Cell): boolean {
         const originalTargetFigure = targetCell.figure;
         const originalPosition = figure.cell;
 
         try {
+            if (!figure.canMove(targetCell)) return false;
             targetCell.figure = figure;
             figure.cell = targetCell;
             originalPosition.figure = null;
@@ -279,50 +266,16 @@ export class Board {
         cell.figure = new figureClass(color, cell);
     }
 
-    private addPawns(): void {
+    public addFigures(): void {
+        [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook].forEach((cls, i) => {
+            this.addFigure(cls, Colors.BLACK, { y: 0, x: i });
+            this.addFigure(cls, Colors.WHITE, { y: 7, x: i });
+        });
+
+        // Добавление пешек
         for (let i = 0; i < 8; i++) {
             this.addFigure(Pawn, Colors.BLACK, { y: 1, x: i });
             this.addFigure(Pawn, Colors.WHITE, { y: 6, x: i });
         }
-    }
-
-    private addQueens(): void {
-        this.addFigure(Queen, Colors.BLACK, { y: 0, x: 3 });
-        this.addFigure(Queen, Colors.WHITE, { y: 7, x: 3 });
-    }
-
-    private addKings(): void {
-        this.addFigure(King, Colors.BLACK, { y: 0, x: 4 });
-        this.addFigure(King, Colors.WHITE, { y: 7, x: 4 });
-    }
-
-    private addBishops(): void {
-        this.addFigure(Bishop, Colors.BLACK, { y: 0, x: 2 });
-        this.addFigure(Bishop, Colors.BLACK, { y: 0, x: 5 });
-        this.addFigure(Bishop, Colors.WHITE, { y: 7, x: 2 });
-        this.addFigure(Bishop, Colors.WHITE, { y: 7, x: 5 });
-    }
-
-    private addKnights(): void {
-        this.addFigure(Knight, Colors.BLACK, { y: 0, x: 1 });
-        this.addFigure(Knight, Colors.BLACK, { y: 0, x: 6 });
-        this.addFigure(Knight, Colors.WHITE, { y: 7, x: 1 });
-        this.addFigure(Knight, Colors.WHITE, { y: 7, x: 6 });
-    }
-
-    private addRooks(): void {
-        this.addFigure(Rook, Colors.BLACK, { y: 0, x: 0 });
-        this.addFigure(Rook, Colors.BLACK, { y: 0, x: 7 });
-        this.addFigure(Rook, Colors.WHITE, { y: 7, x: 0 });
-        this.addFigure(Rook, Colors.WHITE, { y: 7, x: 7 });
-    }
-
-    public addFigures(): void {
-        this.addKings();
-        this.addPawns();
-        this.addRooks();
-        this.addQueens();
-        this.addBishops();
-        this.addKnights();
     }
 }

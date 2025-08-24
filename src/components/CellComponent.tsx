@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
 import { CellComponentProps } from "../types";
@@ -6,10 +6,12 @@ import { CellComponentProps } from "../types";
 const CellComponent: FC<CellComponentProps> = (props) => {
     const { cell, selected, click, currentPlayer } = props;
 
-    const isKingInCheck =
-        cell.figure?.name === FigureNames.KING &&
-        cell.figure.color === currentPlayer.color &&
-        cell.board.isKingInCheck(currentPlayer.color);
+    const isKingInCheck = useMemo(() => {
+        if (cell.figure?.name === FigureNames.KING && cell.figure.color === currentPlayer.color) {
+            return cell.board.isKingInCheck(currentPlayer.color);
+        }
+        return false;
+    }, [cell, currentPlayer]);
 
     return (
         <div

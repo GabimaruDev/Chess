@@ -1,5 +1,6 @@
 import { Board } from "../models/Board";
 import { Cell } from "../models/Cell";
+import { Colors } from "../models/Colors";
 import { Player } from "../models/Player";
 
 export interface BoardComponentProps {
@@ -22,19 +23,13 @@ export interface TimerProps {
     currentPlayer: Player;
     restart: () => void;
     isPaused: boolean;
-    isCheckmate: boolean;
-    isStalemate: boolean;
-    winner: Player | null;
     initGame: () => void;
     isStartGame: boolean;
 }
 
 export interface GameState {
-    board: Board;
-    currentPlayer: Player;
-    selectedCell: Cell | null;
     gameOver: boolean;
-    winner: Player | null;
+    winner: { color: Colors } | null;
     isCheck: boolean;
     isCheckmate: boolean;
     isStalemate: boolean;
