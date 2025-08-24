@@ -1,81 +1,65 @@
-import React, { useCallback, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../hook";
+import React, { FC, useCallback, useEffect, useMemo } from "react";
 import { Cell } from "../models/Cell";
 import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
-import { Player } from "../models/Player";
-import { setBoard, setSelectedCell, swapPlayer } from "../store/slices";
+import { BoardComponentProps } from "../types";
 import CellComponent from "./CellComponent";
 import ModalTransformPawn from "./ModalTransformPawn";
 
-const BoardComponent = () => {
-    const dispatch = useAppDispatch();
-    const gameState = useAppSelector((state) => state.chess);
+const BoardComponent: FC<BoardComponentProps> = (props) => {
+    const { board, setBoard, currentPlayer, swapPlayer, selectedCell, setSelectedCell } = props;
 
     const handleCellClick = useCallback(
         (cell: Cell) => {
-            if (gameState.selectedCell && gameState.selectedCell !== cell && cell.available) {
+            if (selectedCell && selectedCell !== cell && cell.available) {
                 if (
-                    gameState.selectedCell.figure?.name === FigureNames.PAWN &&
+                    selectedCell.figure?.name === FigureNames.PAWN &&
                     (cell.y === 7 || cell.y === 0)
                 ) {
-                    gameState.advancedPawnCell = cell;
+                    board.advancedPawnCell = cell;
                 }
 
-                gameState.selectedCell.moveFigure(cell);
-                dispatch(setSelectedCell(null));
-                dispatch(
-                    swapPlayer(
-                        gameState.currentPlayer.color === Colors.WHITE
-                            ? new Player(Colors.BLACK)
-                            : new Player(Colors.WHITE)
-                    )
-                );
-            } else if (cell.figure?.color === gameState.currentPlayer.color) {
-                dispatch(setSelectedCell(cell));
+                selectedCell.moveFigure(cell);
+                setSelectedCell(null);
+                swapPlayer();
+            } else if (cell.figure?.color === currentPlayer.color) {
+                setSelectedCell(cell);
             } else {
-                dispatch(setSelectedCell(null));
+                setSelectedCell(null);
             }
         },
-        [
-            gameState.selectedCell,
-            gameState.currentPlayer.color,
-            gameState.board,
-            setSelectedCell,
-            swapPlayer,
-        ]
+        [selectedCell, currentPlayer.color, board, setSelectedCell, swapPlayer]
     );
 
     const updateBoard = useCallback(() => {
-        const newBoard = gameState.board.getCopyBoard();
-        dispatch(setBoard(newBoard));
-    }, [gameState.board, setBoard]);
+        const newBoard = board.getCopyBoard();
+        setBoard(newBoard);
+    }, [board, setBoard]);
 
     const highlightCells = useCallback(() => {
-        gameState.board.highlightCells(gameState.selectedCell, gameState.currentPlayer.color);
+        board.highlightCells(selectedCell, currentPlayer.color);
         updateBoard();
-    }, [gameState.selectedCell, gameState.currentPlayer.color, gameState.board, updateBoard]);
+    }, [selectedCell, currentPlayer.color, board, updateBoard]);
 
     useEffect(() => {
         highlightCells();
-    }, [gameState.selectedCell]);
+    }, [selectedCell]);
 
-    const boardClassName = [
-        "board",
-        gameState.currentPlayer.color === Colors.BLACK ? "swapPlayer" : "",
-    ].join(" ");
+    const boardClassName = useMemo(() => {
+        return ["board", currentPlayer.color === Colors.BLACK ? "swapPlayer" : ""].join(" ");
+    }, [currentPlayer.color]);
 
     const isSelected = useCallback(
         (cell: Cell) => {
-            return cell.x === gameState.selectedCell?.x && cell.y === gameState.selectedCell?.y;
+            return cell.x === selectedCell?.x && cell.y === selectedCell?.y;
         },
-        [gameState.selectedCell]
+        [selectedCell]
     );
 
     return (
         <>
             <div className={boardClassName}>
-                {gameState.board.cells.map((row, index) => (
+                {board.cells.map((row, index) => (
                     <React.Fragment key={index}>
                         {row.map((cell) => (
                             <CellComponent
@@ -83,13 +67,14 @@ const BoardComponent = () => {
                                 cell={cell}
                                 selected={isSelected(cell)}
                                 click={handleCellClick}
+                                currentPlayer={currentPlayer}
                             />
                         ))}
                     </React.Fragment>
                 ))}
             </div>
-            {gameState.advancedPawnCell && (
-                <ModalTransformPawn board={gameState.board} updateBoard={updateBoard} />
+            {board.advancedPawnCell && (
+                <ModalTransformPawn board={board} updateBoard={updateBoard} />
             )}
         </>
     );

@@ -89,7 +89,7 @@ export class Cell {
 
         if (this.figure.name === FigureNames.KING) {
             this.handleKingMove(target);
-        } else if (target.available) {
+        } else if (this.figure.canMove(target)) {
             this.executeMove(target);
         }
     }

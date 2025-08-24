@@ -21,15 +21,13 @@ export class Pawn extends Figure {
 
         if (
             target.x === this.cell.x &&
-            target.y === this.cell.y + direction &&
+            ((this.isFirstStep &&
+                target.y === this.cell.y + directionFirstStep &&
+                this.cell.isEmptyVertical(target)) ||
+                target.y === this.cell.y + direction) &&
             this.cell.board.getCell(target.y, target.x).isEmpty() &&
             !checkingForAttack
         ) {
-            return true;
-        } else if (target.x === this.cell.x && this.isFirstStep &&
-            target.y === this.cell.y + directionFirstStep &&
-            this.cell.isEmptyVertical(target) && this.cell.board.getCell(target.y, target.x).isEmpty() &&
-            !checkingForAttack) {
             return true;
         } else if (
             (target.x === this.cell.x - 1 || target.x === this.cell.x + 1) &&

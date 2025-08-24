@@ -1,16 +1,15 @@
 import { FC } from "react";
-import { useAppSelector } from "../hook";
 import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
 import { CellComponentProps } from "../types";
 
 const CellComponent: FC<CellComponentProps> = (props) => {
-    const { cell, selected, click } = props;
-    const gameState = useAppSelector((state) => state.chess);
+    const { cell, selected, click, currentPlayer } = props;
+
     const isKingInCheck =
         cell.figure?.name === FigureNames.KING &&
-        cell.figure.color === gameState.currentPlayer.color &&
-        cell.board.isKingInCheck(gameState.currentPlayer.color);
+        cell.figure.color === currentPlayer.color &&
+        cell.board.isKingInCheck(currentPlayer.color);
 
     return (
         <div
@@ -19,7 +18,7 @@ const CellComponent: FC<CellComponentProps> = (props) => {
                 cell.color,
                 selected ? "selected" : "",
                 cell.available && cell.figure ? "available-enemy" : "",
-                gameState.currentPlayer.color === Colors.BLACK ? "swapPlayer" : "",
+                currentPlayer.color === Colors.BLACK ? "swapPlayer" : "",
                 isKingInCheck ? "check" : "",
             ].join(" ")}
             onClick={() => click(cell)}
