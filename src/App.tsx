@@ -32,6 +32,7 @@ function App() {
         setBoard(newBoard);
         setCurrentPlayer(whitePlayer);
         setSelectedCell(null);
+        setIsStartGame(true);
     }, []);
 
     const checkGameStatus = useCallback(() => {
