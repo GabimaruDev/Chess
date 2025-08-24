@@ -1,5 +1,5 @@
 import { Figure, FigureNames } from "./Figure";
-import { Colors } from "../Colors";
+import { Colors } from "../../types";
 import { Cell } from "../Cell";
 import blackLogo from "../../assets/images/min-black-rook.png";
 import yellowLogo from "../../assets/images/min-yellow-rook.png";

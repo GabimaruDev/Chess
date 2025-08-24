@@ -1,6 +1,5 @@
-import { Position } from "../types";
+import { Colors, Position } from "../types";
 import { Cell } from "./Cell";
-import { Colors } from "./Colors";
 import { Bishop } from "./figures/Bishop";
 import { Figure, FigureNames } from "./figures/Figure";
 import { King } from "./figures/King";

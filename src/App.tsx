@@ -3,9 +3,9 @@ import BoardComponent from "./components/BoardComponent";
 import LostFigures from "./components/LostFigures";
 import Timer from "./components/Timer";
 import { useAppDispatch, useAppSelector } from "./hook";
-import { Colors } from "./models/Colors";
 import { Player } from "./models/Player";
 import { setGameStatus } from "./store/slices";
+import { Colors } from "./types";
 
 function App() {
     const dispatch = useAppDispatch();
@@ -40,9 +40,7 @@ function App() {
     const currentPlayerName = gameState.currentPlayer.color === Colors.BLACK ? "Чёрные" : "Белые";
     const getStatusMessage = () => {
         if (gameState.isCheckmate) {
-            return `Мат! ${
-                gameState.winner?.color === Colors.BLACK ? "Чёрные" : "Белые"
-            } выиграли!`;
+            return `Мат! ${currentPlayerName} выиграли!`;
         } else if (gameState.isStalemate) {
             return "Пат! Ничья!";
         } else if (gameState.isCheck) {

@@ -7,24 +7,24 @@ import bishopLogoYellow from "../assets/images/min-yellow-bishop.png";
 import knightLogoYellow from "../assets/images/min-yellow-knight.png";
 import queenLogoYellow from "../assets/images/min-yellow-queen.png";
 import rookLogoYellow from "../assets/images/min-yellow-rook.png";
-import { Board } from "../models/Board";
+import { useAppSelector } from "../hook";
 import { Cell } from "../models/Cell";
-import { Colors } from "../models/Colors";
 import { Bishop } from "../models/figures/Bishop";
 import { FigureNames } from "../models/figures/Figure";
 import { Knight } from "../models/figures/Knight";
 import { Queen } from "../models/figures/Queen";
 import { Rook } from "../models/figures/Rook";
+import { Colors } from "../types";
 import ModalWindow from "./ModalWindow";
 
 interface ModalTransformPawnProps {
-    board: Board;
     updateBoard: () => void;
 }
 
 const ModalTransformPawn: FC<ModalTransformPawnProps> = (props) => {
-    const { board, updateBoard } = props;
+    const { updateBoard } = props;
     const sizeImg = 36;
+    const gameState = useAppSelector((state) => state.chess);
 
     const pawnTransformation = (figure: FigureNames, cell: Cell, color: Colors) => {
         switch (figure) {
@@ -46,9 +46,9 @@ const ModalTransformPawn: FC<ModalTransformPawnProps> = (props) => {
     };
 
     const handleAdvancedPawn = (figure: FigureNames, color?: Colors) => {
-        if (board.advancedPawnCell && color) {
-            pawnTransformation(figure, board.advancedPawnCell, color);
-            board.advancedPawnCell = null;
+        if (gameState.advancedPawnCell && color) {
+            pawnTransformation(figure, gameState.advancedPawnCell, color);
+            gameState.advancedPawnCell = null;
             updateBoard();
         }
     };
@@ -60,12 +60,12 @@ const ModalTransformPawn: FC<ModalTransformPawnProps> = (props) => {
             <button
                 className="btn"
                 onClick={() =>
-                    handleAdvancedPawn(FigureNames.QUEEN, board.advancedPawnCell?.figure?.color)
+                    handleAdvancedPawn(FigureNames.QUEEN, gameState.advancedPawnCell?.figure?.color)
                 }
             >
                 <img
                     src={
-                        board.advancedPawnCell?.figure?.color === Colors.BLACK
+                        gameState.advancedPawnCell?.figure?.color === Colors.BLACK
                             ? queenLogoBlack
                             : queenLogoYellow
                     }
@@ -77,12 +77,15 @@ const ModalTransformPawn: FC<ModalTransformPawnProps> = (props) => {
             <button
                 className="btn"
                 onClick={() =>
-                    handleAdvancedPawn(FigureNames.KNIGHT, board.advancedPawnCell?.figure?.color)
+                    handleAdvancedPawn(
+                        FigureNames.KNIGHT,
+                        gameState.advancedPawnCell?.figure?.color
+                    )
                 }
             >
                 <img
                     src={
-                        board.advancedPawnCell?.figure?.color === Colors.BLACK
+                        gameState.advancedPawnCell?.figure?.color === Colors.BLACK
                             ? knightLogoBlack
                             : knightLogoYellow
                     }
@@ -94,12 +97,15 @@ const ModalTransformPawn: FC<ModalTransformPawnProps> = (props) => {
             <button
                 className="btn"
                 onClick={() =>
-                    handleAdvancedPawn(FigureNames.BISHOP, board.advancedPawnCell?.figure?.color)
+                    handleAdvancedPawn(
+                        FigureNames.BISHOP,
+                        gameState.advancedPawnCell?.figure?.color
+                    )
                 }
             >
                 <img
                     src={
-                        board.advancedPawnCell?.figure?.color === Colors.BLACK
+                        gameState.advancedPawnCell?.figure?.color === Colors.BLACK
                             ? bishopLogoBlack
                             : bishopLogoYellow
                     }
@@ -111,12 +117,12 @@ const ModalTransformPawn: FC<ModalTransformPawnProps> = (props) => {
             <button
                 className="btn"
                 onClick={() =>
-                    handleAdvancedPawn(FigureNames.ROOK, board.advancedPawnCell?.figure?.color)
+                    handleAdvancedPawn(FigureNames.ROOK, gameState.advancedPawnCell?.figure?.color)
                 }
             >
                 <img
                     src={
-                        board.advancedPawnCell?.figure?.color === Colors.BLACK
+                        gameState.advancedPawnCell?.figure?.color === Colors.BLACK
                             ? rookLogoBlack
                             : rookLogoYellow
                     }

@@ -1,4 +1,4 @@
-import { Colors } from "./Colors";
+import { Colors } from "../types";
 
 export class Player {
     color: Colors;

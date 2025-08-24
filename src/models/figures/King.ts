@@ -1,7 +1,7 @@
 import blackLogo from "../../assets/images/min-black-king.png";
 import yellowLogo from "../../assets/images/min-yellow-king.png";
 import { Cell } from "../Cell";
-import { Colors } from "../Colors";
+import { Colors } from "../../types";
 import { Figure, FigureNames } from "./Figure";
 
 export class King extends Figure {

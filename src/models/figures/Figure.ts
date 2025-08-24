@@ -1,5 +1,5 @@
 import { Cell } from "../Cell";
-import { Colors } from "../Colors";
+import { Colors } from "../../types";
 
 export const enum FigureNames {
     "FIGURE" = "Фигура",
