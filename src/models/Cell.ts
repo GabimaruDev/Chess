@@ -89,7 +89,7 @@ export class Cell {
 
         if (this.figure.name === FigureNames.KING) {
             this.handleKingMove(target);
-        } else if (this.figure.canMove(target)) {
+        } else if (target.available) {
             this.executeMove(target);
         }
     }
@@ -112,13 +112,13 @@ export class Cell {
         const castlingPositions =
             this.figure.color === Colors.BLACK
                 ? [
-                    { x: 2, y: 0 },
-                    { x: 6, y: 0 },
-                ]
+                      { x: 2, y: 0 },
+                      { x: 6, y: 0 },
+                  ]
                 : [
-                    { x: 2, y: 7 },
-                    { x: 6, y: 7 },
-                ];
+                      { x: 2, y: 7 },
+                      { x: 6, y: 7 },
+                  ];
 
         return castlingPositions.some((pos) => pos.x === target.x && pos.y === target.y);
     }
@@ -174,6 +174,17 @@ export class Cell {
         if (!this.figure) return;
 
         this.figure.moveFigure();
+        if (this.figure.name === FigureNames.PAWN && !target.figure && this.x != target.x) {
+            const targetPawnCell = this.board.getCell(
+                target.y - (this.color == Colors.BLACK ? 1 : -1),
+                target.x
+            );
+            console.log(targetPawnCell);
+            if (targetPawnCell.figure) {
+                this.board.addLostFigure(targetPawnCell.figure);
+                targetPawnCell.figure = null;
+            }
+        }
         if (target.figure) this.board.addLostFigure(target.figure);
         target.setFigure(this.figure);
         this.figure = null;

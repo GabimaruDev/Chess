@@ -13,31 +13,27 @@ export class Pawn extends Figure {
         this.name = FigureNames.PAWN;
     }
 
-    canMove(target: Cell, checkingForAttack = false): boolean {
+    canMove(target: Cell, checkingForAttack = false, _passingPawn: null | Cell = null): boolean {
         if (!super.canMove(target)) return false;
 
         const direction = this.color == Colors.BLACK ? 1 : -1;
-        const directionFirstStep = this.color == Colors.BLACK ? 2 : -2;
-        const isForward = target.x === this.cell.x;
 
         if (
-            isForward &&
-            !checkingForAttack
+            target.x === this.cell.x &&
+            !checkingForAttack &&
+            this.cell.board.getCell(target.y, target.x).isEmpty() &&
+            (target.y === this.cell.y + direction ||
+                (this.isFirstStep &&
+                    target.y === this.cell.y + direction * 2 &&
+                    this.cell.isEmptyVertical(target)))
         ) {
-            if (
-                target.y === this.cell.y + direction &&
-                this.cell.board.getCell(target.y, target.x).isEmpty() &&
-                !checkingForAttack) {
-                return true;
-            } else if (this.isFirstStep &&
-                target.y === this.cell.y + directionFirstStep &&
-                this.cell.isEmptyVertical(target)) {
-                return true;
-            }
+            return true;
         } else if (
-            (target.x === this.cell.x - 1 || target.x === this.cell.x + 1) &&
             target.y === this.cell.y + direction &&
-            (this.cell.isEnemy(target) || checkingForAttack)
+            (target.x === this.cell.x - 1 || target.x === this.cell.x + 1) &&
+            (this.cell.isEnemy(target) ||
+                checkingForAttack ||
+                (_passingPawn?.x === target.x && _passingPawn?.y === target.y))
         ) {
             return true;
         }

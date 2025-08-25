@@ -12,11 +12,16 @@ const BoardComponent: FC<BoardComponentProps> = (props) => {
     const handleCellClick = useCallback(
         (cell: Cell) => {
             if (selectedCell && selectedCell !== cell && cell.available) {
-                if (
-                    selectedCell.figure?.name === FigureNames.PAWN &&
-                    (cell.y === 7 || cell.y === 0)
-                ) {
-                    board.advancedPawnCell = cell;
+                board.passingPawn = null;
+                if (selectedCell.figure?.name === FigureNames.PAWN) {
+                    const direction = selectedCell.figure.color == Colors.BLACK ? 1 : -1;
+                    if (cell.y === 7 || cell.y === 0) board.advancedPawnCell = cell;
+                    if (
+                        selectedCell.figure.isFirstStep &&
+                        cell.y === selectedCell.y + direction * 2
+                    ) {
+                        board.passingPawn = board.getCell(cell.y - direction, cell.x);
+                    }
                 }
 
                 selectedCell.moveFigure(cell);

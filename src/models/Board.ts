@@ -14,11 +14,13 @@ export class Board {
     lostBlackFigures: Figure[] = [];
     lostWhiteFigures: Figure[] = [];
     advancedPawnCell: Cell | null = null;
+    passingPawn: Cell | null = null;
 
     public initCells(): void {
         this.cells = Array.from({ length: 8 }, (_, y) =>
-            Array.from({ length: 8 }, (_, x) =>
-                new Cell(this, x, y, (x + y) % 2 ? Colors.BLACK : Colors.WHITE, null)
+            Array.from(
+                { length: 8 },
+                (_, x) => new Cell(this, x, y, (x + y) % 2 ? Colors.BLACK : Colors.WHITE, null)
             )
         );
     }
@@ -29,6 +31,7 @@ export class Board {
         newBoard.lostWhiteFigures = this.lostWhiteFigures;
         newBoard.lostBlackFigures = this.lostBlackFigures;
         newBoard.advancedPawnCell = this.advancedPawnCell;
+        newBoard.passingPawn = this.passingPawn;
         return newBoard;
     }
 
@@ -45,6 +48,14 @@ export class Board {
 
         if (selectedCell.figure.name === FigureNames.KING) {
             return this.handleKingHighlight(selectedCell, target, color);
+        }
+
+        if (
+            selectedCell.figure.name === FigureNames.PAWN &&
+            this.passingPawn?.x === target.x &&
+            this.passingPawn?.y === target.y
+        ) {
+            return this.isMoveSafe(selectedCell.figure, target);
         }
 
         if (this.isKingInCheck(color)) {
@@ -68,13 +79,13 @@ export class Board {
         const castlingPositions =
             color === Colors.BLACK
                 ? [
-                    { x: 2, y: 0 },
-                    { x: 6, y: 0 },
-                ]
+                      { x: 2, y: 0 },
+                      { x: 6, y: 0 },
+                  ]
                 : [
-                    { x: 2, y: 7 },
-                    { x: 6, y: 7 },
-                ];
+                      { x: 2, y: 7 },
+                      { x: 6, y: 7 },
+                  ];
 
         return castlingPositions.some((pos) => pos.x === target.x && pos.y === target.y);
     }
@@ -232,7 +243,7 @@ export class Board {
         const originalPosition = figure.cell;
 
         try {
-            if (!figure.canMove(targetCell)) return false;
+            if (!figure.canMove(targetCell, false, this.passingPawn)) return false;
             targetCell.figure = figure;
             figure.cell = targetCell;
             originalPosition.figure = null;

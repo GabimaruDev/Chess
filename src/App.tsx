@@ -8,6 +8,7 @@ import { Cell } from "./models/Cell";
 import { Colors } from "./models/Colors";
 import { Player } from "./models/Player";
 import { setGameStatus } from "./store/slice";
+import { GameState } from "./types";
 
 function App() {
     const whitePlayer = useMemo(() => new Player(Colors.WHITE), []);
@@ -18,7 +19,7 @@ function App() {
     const [isTimerPaused, setIsTimerPaused] = useState(true);
     const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
     const dispatch = useAppDispatch();
-    const gameState = useAppSelector((state) => state.chess);
+    const gameState: GameState = useAppSelector((state) => state.chess);
 
     const initGame = useCallback(() => {
         setIsStartGame(false);

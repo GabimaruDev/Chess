@@ -28,12 +28,16 @@ export class Figure {
         this.id = Math.random();
     }
 
-    public canMove(target: Cell, _checkingForAttack = false): boolean {
+    public canMove(
+        target: Cell,
+        _checkingForAttack = false,
+        _passingPawn: null | Cell = null
+    ): boolean {
         if (target.figure?.color === this.color) return false;
         return true;
     }
 
-    public moveFigure() { }
+    public moveFigure() {}
 
     public hasFirstStep(): boolean | null {
         return this.isFirstStep;
