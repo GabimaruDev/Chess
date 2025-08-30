@@ -58,10 +58,6 @@ export class Board {
             return this.isMoveSafe(selectedCell.figure, target);
         }
 
-        if (this.isKingInCheck(color)) {
-            return this.isMoveSafe(selectedCell.figure, target);
-        }
-
         return this.isMoveSafe(selectedCell.figure, target);
     }
 
@@ -219,16 +215,13 @@ export class Board {
         for (const row of this.cells) {
             for (const cell of row) {
                 const figure = cell.figure;
-                if (figure?.color === color) {
-                    for (let dy = -1; dy <= 1; dy++) {
-                        for (let dx = -1; dx <= 1; dx++) {
-                            const y = cell.y + dy;
-                            const x = cell.x + dx;
-                            if (y >= 0 && y < 8 && x >= 0 && x < 8) {
-                                const target = this.getCell(y, x);
-                                if (this.isMoveSafe(figure, target)) {
-                                    return true;
-                                }
+                if (!figure || figure.color !== color) continue;
+                for (let y = 0; y < 8; y++) {
+                    for (let x = 0; x < 8; x++) {
+                        const target = this.getCell(y, x);
+                        if (figure.canMove(target, false)) {
+                            if (this.isMoveSafe(figure, target)) {
+                                return true;
                             }
                         }
                     }
@@ -283,7 +276,6 @@ export class Board {
             this.addFigure(cls, Colors.WHITE, { y: 7, x: i });
         });
 
-        // Добавление пешек
         for (let i = 0; i < 8; i++) {
             this.addFigure(Pawn, Colors.BLACK, { y: 1, x: i });
             this.addFigure(Pawn, Colors.WHITE, { y: 6, x: i });
