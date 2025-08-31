@@ -19,7 +19,6 @@ const CellComponent: FC<CellComponentProps> = (props) => {
         <div
             className={[
                 "cell",
-                cell.color,
                 selected ? "selected" : "",
                 cell.available && cell.figure ? "available-enemy" : "",
                 currentPlayer.color === Colors.BLACK && cell.figure ? "swapPlayer" : "",

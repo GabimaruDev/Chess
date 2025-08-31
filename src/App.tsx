@@ -72,7 +72,6 @@ function App() {
     return (
         <div className="app-wrapper">
             <div className="app">
-                <StatusText currentPlayer={currentPlayer} />
                 <BoardComponent
                     board={board}
                     setBoard={setBoard}
