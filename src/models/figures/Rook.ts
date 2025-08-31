@@ -1,26 +1,26 @@
-import { Figure, FigureNames } from "./Figure";
-import { Colors } from "../Colors";
-import { Cell } from "../Cell";
 import blackLogo from "../../assets/images/min-black-rook.png";
 import yellowLogo from "../../assets/images/min-yellow-rook.png";
+import { Cell } from "../Cell";
+import { Colors } from "../Colors";
+import { Figure, FigureNames } from "./Figure";
 
 export class Rook extends Figure {
-    isFirstStep: boolean = true;
+  isFirstStep: boolean = true;
 
-    constructor(color: Colors, cell: Cell) {
-        super(color, cell);
-        this.logo = color === Colors.BLACK ? blackLogo : yellowLogo;
-        this.name = FigureNames.ROOK;
-    }
+  constructor(color: Colors, cell: Cell) {
+    super(color, cell);
+    this.logo = color === Colors.BLACK ? blackLogo : yellowLogo;
+    this.name = FigureNames.ROOK;
+  }
 
-    canMove(target: Cell): boolean {
-        if (!super.canMove(target)) return false;
-        if (this.cell.isEmptyVertical(target)) return true;
-        if (this.cell.isEmptyHorizontal(target)) return true;
-        return false;
-    }
+  canMove(target: Cell): boolean {
+    if (!super.canMove(target)) return false;
+    if (this.cell.isEmptyVertical(target)) return true;
+    if (this.cell.isEmptyHorizontal(target)) return true;
+    return false;
+  }
 
-    moveFigure(): void {
-        this.isFirstStep = false;
-    }
+  moveFigure(): void {
+    this.isFirstStep = false;
+  }
 }
