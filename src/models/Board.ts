@@ -240,7 +240,6 @@ export class Board {
             targetCell.figure = figure;
             figure.cell = targetCell;
             originalPosition.figure = null;
-
             return !this.isKingInCheck(figure.color);
         } finally {
             originalPosition.figure = figure;

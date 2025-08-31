@@ -44,7 +44,7 @@ const BoardComponent: FC<BoardComponentProps> = (props) => {
     const highlightCells = useCallback(() => {
         board.highlightCells(selectedCell, currentPlayer.color);
         updateBoard();
-    }, [selectedCell, currentPlayer.color, board, updateBoard]);
+    }, [selectedCell, currentPlayer.color, board]);
 
     useEffect(() => {
         highlightCells();
@@ -61,6 +61,10 @@ const BoardComponent: FC<BoardComponentProps> = (props) => {
         [selectedCell]
     );
 
+    const isCurrentKingInCheck = useMemo(() => {
+        return board.isKingInCheck(currentPlayer.color);
+    }, [board, currentPlayer.color]);
+
     return (
         <>
             <div className={boardClassName}>
@@ -73,6 +77,7 @@ const BoardComponent: FC<BoardComponentProps> = (props) => {
                                 selected={isSelected(cell)}
                                 click={handleCellClick}
                                 currentPlayer={currentPlayer}
+                                isCurrentKingInCheck={isCurrentKingInCheck}
                             />
                         ))}
                     </React.Fragment>

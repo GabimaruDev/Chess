@@ -1,6 +1,7 @@
 import { Board } from "../models/Board";
 import { Cell } from "../models/Cell";
 import { Colors } from "../models/Colors";
+import { Figure } from "../models/figures/Figure";
 import { Player } from "../models/Player";
 
 export interface BoardComponentProps {
@@ -17,14 +18,16 @@ export interface CellComponentProps {
     selected: boolean;
     click: (cell: Cell) => void;
     currentPlayer: Player;
+    isCurrentKingInCheck?: boolean;
 }
 
 export interface TimerProps {
     currentPlayer: Player;
     restart: () => void;
-    isPaused: boolean;
     initGame: () => void;
     isStartGame: boolean;
+    hasAdvancedPawn: boolean;
+    figuresArray: [Figure[], Figure[]];
 }
 
 export interface GameState {

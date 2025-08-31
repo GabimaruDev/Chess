@@ -1,17 +1,19 @@
-import { FC, useMemo } from "react";
+import { FC, memo, useMemo } from "react";
+import { useAppSelector } from "../hook";
 import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
 import { CellComponentProps } from "../types";
 
 const CellComponent: FC<CellComponentProps> = (props) => {
-    const { cell, selected, click, currentPlayer } = props;
+    const { cell, selected, click, currentPlayer, isCurrentKingInCheck } = props;
+    const gameState = useAppSelector((state) => state.chess);
 
     const isKingInCheck = useMemo(() => {
         if (cell.figure?.name === FigureNames.KING && cell.figure.color === currentPlayer.color) {
-            return cell.board.isKingInCheck(currentPlayer.color);
+            return !!isCurrentKingInCheck;
         }
         return false;
-    }, [cell, currentPlayer]);
+    }, [cell.figure?.name, currentPlayer.color]);
 
     return (
         <div
@@ -20,8 +22,8 @@ const CellComponent: FC<CellComponentProps> = (props) => {
                 cell.color,
                 selected ? "selected" : "",
                 cell.available && cell.figure ? "available-enemy" : "",
-                currentPlayer.color === Colors.BLACK ? "swapPlayer" : "",
-                isKingInCheck ? "check" : "",
+                currentPlayer.color === Colors.BLACK && cell.figure ? "swapPlayer" : "",
+                gameState.isCheck && isKingInCheck ? "check" : "",
             ].join(" ")}
             onClick={() => click(cell)}
         >
@@ -31,4 +33,4 @@ const CellComponent: FC<CellComponentProps> = (props) => {
     );
 };
 
-export default CellComponent;
+export default memo(CellComponent);

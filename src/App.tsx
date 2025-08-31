@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import BoardComponent from "./components/BoardComponent";
-import LostFigures from "./components/LostFigures";
+import StatusText from "./components/StatusText";
 import Timer from "./components/Timer";
-import { useAppDispatch, useAppSelector } from "./hook";
+import { useAppDispatch } from "./hook";
 import { Board } from "./models/Board";
 import { Cell } from "./models/Cell";
 import { Colors } from "./models/Colors";
 import { Player } from "./models/Player";
 import { setGameStatus } from "./store/slice";
-import { GameState } from "./types";
 
 function App() {
     const whitePlayer = useMemo(() => new Player(Colors.WHITE), []);
@@ -16,14 +15,11 @@ function App() {
     const [currentPlayer, setCurrentPlayer] = useState<Player>(whitePlayer);
     const [board, setBoard] = useState(new Board());
     const [isStartGame, setIsStartGame] = useState(true);
-    const [isTimerPaused, setIsTimerPaused] = useState(true);
     const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
     const dispatch = useAppDispatch();
-    const gameState: GameState = useAppSelector((state) => state.chess);
 
     const initGame = useCallback(() => {
         setIsStartGame(false);
-        setIsTimerPaused(false);
     }, []);
 
     const restart = useCallback(() => {
@@ -67,39 +63,16 @@ function App() {
 
     useEffect(() => {
         checkGameStatus();
-    }, [board]);
-
-    useEffect(() => {
-        setIsTimerPaused(
-            isStartGame ||
-                !!board.advancedPawnCell ||
-                gameState.isCheckmate ||
-                gameState.isStalemate
-        );
-    }, [isStartGame, board.advancedPawnCell, gameState.isCheckmate, gameState.isStalemate]);
+    }, [checkGameStatus]);
 
     useEffect(() => {
         restart();
     }, []);
 
-    const currentPlayerName = currentPlayer.color === Colors.BLACK ? "Чёрные" : "Белые";
-    const getStatusMessage = () => {
-        if (gameState.isCheckmate) {
-            return `Мат! ${
-                gameState.winner?.color === Colors.BLACK ? "Чёрные" : "Белые"
-            } выиграли!`;
-        } else if (gameState.isStalemate) {
-            return "Пат! Ничья!";
-        } else if (gameState.isCheck) {
-            return `Шах! ${currentPlayerName} должен защитить короля!`;
-        }
-        return `Ход игрока: ${currentPlayerName}`;
-    };
-
     return (
         <div className="app-wrapper">
             <div className="app">
-                <h2 className="turn">{getStatusMessage()}</h2>
+                <StatusText currentPlayer={currentPlayer} />
                 <BoardComponent
                     board={board}
                     setBoard={setBoard}
@@ -111,14 +84,11 @@ function App() {
                 <Timer
                     restart={restart}
                     currentPlayer={currentPlayer}
-                    isPaused={isTimerPaused}
                     initGame={initGame}
                     isStartGame={isStartGame}
+                    hasAdvancedPawn={!!board.advancedPawnCell}
+                    figuresArray={[board.lostBlackFigures, board.lostWhiteFigures]}
                 />
-                <div className="lost-wrapper">
-                    <LostFigures title="Чёрные фигуры" figures={board.lostBlackFigures} />
-                    <LostFigures title="Белые фигуры" figures={board.lostWhiteFigures} />
-                </div>
             </div>
         </div>
     );
