@@ -31,7 +31,7 @@ export class Pawn extends Figure {
     } else if (
       target.y === this.cell.y + direction &&
       (target.x === this.cell.x - 1 || target.x === this.cell.x + 1) &&
-      (this.cell.isEnemy(target) ||
+      (!!target.figure ||
         checkingForAttack ||
         (_passingPawn?.x === target.x && _passingPawn?.y === target.y))
     ) {

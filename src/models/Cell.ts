@@ -21,16 +21,8 @@ export class Cell {
     this.id = x;
   }
 
-  public isFirstStep(y: Cell["y"], x: Cell["x"]): boolean {
-    return this.board.getCell(y, x).figure?.hasFirstStep() || false;
-  }
-
   public isEmpty(): boolean {
     return this.figure === null;
-  }
-
-  public isEnemy(target: Cell): boolean {
-    return !!target.figure;
   }
 
   public isEmptyVertical(target: Cell): boolean {
@@ -179,7 +171,6 @@ export class Cell {
         target.y - (this.color == Colors.BLACK ? 1 : -1),
         target.x
       );
-      console.log(targetPawnCell);
       if (targetPawnCell.figure) {
         this.board.addLostFigure(targetPawnCell.figure);
         targetPawnCell.figure = null;

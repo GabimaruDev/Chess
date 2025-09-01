@@ -25,8 +25,7 @@ const Timer: FC<TimerProps> = (props) => {
   }, []);
 
   const updateTime = useCallback((time: number, isWhite: boolean) => {
-    const displayTime =
-      time < 60 ? Math.max(0, Math.round(time * 10) / 10) : Math.max(0, Math.floor(time));
+    const displayTime = time < 60 ? Math.max(0, time) : Math.max(0, Math.floor(time));
 
     if (isWhite) {
       setWhiteTime((prev) => (prev !== displayTime ? displayTime : prev));
@@ -46,7 +45,6 @@ const Timer: FC<TimerProps> = (props) => {
   };
 
   const startTimer = () => {
-    console.log("startTimer");
     if (timer.current) {
       clearInterval(timer.current);
     }
