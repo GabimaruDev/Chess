@@ -21,7 +21,7 @@ export interface CellComponentProps {
   isCurrentKingInCheck?: boolean;
 }
 
-export interface TimerProps {
+export interface GameInfoProps {
   currentPlayer: Player;
   restart: () => void;
   initGame: () => void;

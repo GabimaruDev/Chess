@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import BoardComponent from "./components/BoardComponent";
-import Timer from "./components/Timer";
+import GameInfo from "./components/GameInfo";
 import { useAppDispatch } from "./hook";
 import { Board } from "./models/Board";
 import { Cell } from "./models/Cell";
@@ -78,7 +78,7 @@ function App() {
           selectedCell={selectedCell}
           setSelectedCell={setSelectedCell}
         />
-        <Timer
+        <GameInfo
           restart={restart}
           currentPlayer={currentPlayer}
           initGame={initGame}

@@ -1,11 +1,11 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../hook";
 import { Colors } from "../models/Colors";
-import { TimerProps } from "../types";
+import { GameInfoProps } from "../types";
 import GameModals from "./GameModals";
 import LostFigures from "./LostFigures";
 
-const Timer: FC<TimerProps> = (props) => {
+const GameInfo: FC<GameInfoProps> = (props) => {
   const { currentPlayer, restart, isStartGame, initGame, hasAdvancedPawn, figuresArray } = props;
   const [blackTime, setBlackTime] = useState(600);
   const [whiteTime, setWhiteTime] = useState(600);
@@ -95,8 +95,8 @@ const Timer: FC<TimerProps> = (props) => {
   };
 
   return (
-    <div className="timer">
-      <div className="timer__time ">
+    <div className="gameInfo">
+      <div className="gameInfo__time">
         <div className="time-lost">
           <h2>
             Белые -{" "}
@@ -130,4 +130,4 @@ const Timer: FC<TimerProps> = (props) => {
   );
 };
 
-export default Timer;
+export default GameInfo;

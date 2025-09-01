@@ -135,7 +135,7 @@
   height: clamp(1rem, 0.6667rem + 1.1111vw, 1.5rem);
 }
 
-.timer {
+.gameInfo {
   width: clamp(18.125rem, 12.1667rem + 26.4815vw, 36rem);
   display: flex;
   flex-direction: column;
@@ -147,7 +147,7 @@
   font-size: clamp(1rem, 0.6667rem + 1.1111vw, 1.5rem);
 }
 
-.timer__time {
+.gameInfo__time {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -155,7 +155,7 @@
   flex-wrap: wrap;
 }
 
-.timer__time h2:last-child {
+.gameInfo__time h2:last-child {
   text-align: end;
 }
 
