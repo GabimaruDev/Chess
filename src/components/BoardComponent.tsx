@@ -1,4 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo } from "react";
+import useSound from "use-sound";
+import move from "../assets/sounds/move.mp3";
 import { Cell } from "../models/Cell";
 import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
@@ -8,7 +10,7 @@ import ModalTransformPawn from "./ModalTransformPawn";
 
 const BoardComponent: FC<BoardComponentProps> = (props) => {
   const { board, setBoard, currentPlayer, swapPlayer, selectedCell, setSelectedCell } = props;
-
+  const [moveSound] = useSound(move, { volume: 0.75, playbackRate: 1.25 });
   const handleCellClick = useCallback(
     (cell: Cell) => {
       if (selectedCell && selectedCell !== cell && cell.available) {
@@ -22,6 +24,7 @@ const BoardComponent: FC<BoardComponentProps> = (props) => {
         }
 
         selectedCell.moveFigure(cell);
+        moveSound();
         setSelectedCell(null);
         swapPlayer();
       } else if (cell.figure?.color === currentPlayer.color) {

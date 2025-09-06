@@ -1,4 +1,4 @@
-import { FC, memo, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { useAppSelector } from "../hook";
 import { Colors } from "../models/Colors";
 import { FigureNames } from "../models/figures/Figure";
@@ -32,4 +32,4 @@ const CellComponent: FC<CellComponentProps> = (props) => {
   );
 };
 
-export default memo(CellComponent);
+export default CellComponent;

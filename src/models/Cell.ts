@@ -18,7 +18,7 @@ export class Cell {
     this.color = color;
     this.figure = figure;
     this.available = false;
-    this.id = x;
+    this.id = y * 8 + x;
   }
 
   public isEmpty(): boolean {
