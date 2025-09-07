@@ -31,7 +31,7 @@ function App() {
     setIsStartGame(true);
   }, []);
 
-  const checkGameStatus = useCallback(() => {
+  useEffect(() => {
     const currentColor = currentPlayer.color;
     const isCheck = board.isKingInCheck(currentColor);
     const isCheckmate = board.isCheckmate(currentColor);
@@ -53,15 +53,11 @@ function App() {
         isStalemate,
       })
     );
-  }, [currentPlayer, board]);
+  }, [currentPlayer]);
 
   const swapPlayer = () => {
     setCurrentPlayer(currentPlayer.color === Colors.WHITE ? blackPlayer : whitePlayer);
   };
-
-  useEffect(() => {
-    checkGameStatus();
-  }, [checkGameStatus]);
 
   useEffect(() => {
     restart();

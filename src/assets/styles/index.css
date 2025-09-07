@@ -32,26 +32,25 @@
 }
 
 .board {
-  width: calc(clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem) * 8);
-  height: calc(clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem) * 8);
+  width: calc(round(clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem), 4px) * 8);
+  height: calc(round(clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem), 4px) * 8);
   display: flex;
   flex-wrap: wrap;
   outline: 2px solid #000;
   filter: drop-shadow(0 0 0.75rem #000);
-  background: url(../images/chess-board.png) center / cover;
 }
 
 .cell {
-  width: clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem);
-  height: clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem);
+  width: round(clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem), 4px);
+  height: round(clamp(2.25rem, 1.5rem + 3.3333vw, 4.5rem), 4px);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .cell img {
-  width: clamp(1.75rem, 1.25rem + 2.2222vw, 3.25rem);
-  height: clamp(1.75rem, 1.25rem + 2.2222vw, 3.25rem);
+  width: round(clamp(1.75rem, 1.2917rem + 2.037vw, 3.125rem), 4px);
+  height: round(clamp(1.75rem, 1.2917rem + 2.037vw, 3.125rem), 4px);
   position: relative;
 }
 
@@ -69,8 +68,8 @@
 }
 
 .available {
-  height: clamp(0.625rem, 0.4583rem + 0.7407vw, 1.125rem);
-  width: clamp(0.625rem, 0.4583rem + 0.7407vw, 1.125rem);
+  height: clamp(0.75rem, 0.5833rem + 0.7407vw, 1.25rem);
+  width: clamp(0.75rem, 0.5833rem + 0.7407vw, 1.25rem);
   border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.17);
 }

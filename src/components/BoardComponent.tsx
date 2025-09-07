@@ -11,6 +11,7 @@ import ModalTransformPawn from "./ModalTransformPawn";
 const BoardComponent: FC<BoardComponentProps> = (props) => {
   const { board, setBoard, currentPlayer, swapPlayer, selectedCell, setSelectedCell } = props;
   const [moveSound] = useSound(move, { volume: 0.75, playbackRate: 1.25 });
+
   const handleCellClick = useCallback(
     (cell: Cell) => {
       if (selectedCell && selectedCell !== cell && cell.available) {
@@ -33,12 +34,11 @@ const BoardComponent: FC<BoardComponentProps> = (props) => {
         setSelectedCell(null);
       }
     },
-    [selectedCell, currentPlayer.color, board, setSelectedCell, swapPlayer]
+    [selectedCell, currentPlayer.color, board]
   );
 
   const updateBoard = useCallback(() => {
-    const newBoard = board.getCopyBoard();
-    setBoard(newBoard);
+    setBoard(board.getCopyBoard());
   }, [board, setBoard]);
 
   const highlightCells = useCallback(() => {
