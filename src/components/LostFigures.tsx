@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Figure } from "../models/figures/Figure";
+import { IFigure } from "../types";
 
 interface LostFiguresProps {
-  figures: Figure[];
+  figures: IFigure[];
 }
 
 const LostFigures: FC<LostFiguresProps> = (props) => {

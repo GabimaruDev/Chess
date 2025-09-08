@@ -1,4 +1,4 @@
-import { Cell } from "../Cell";
+import { ICell, IFigure } from "../../types";
 import { Colors } from "../Colors";
 
 export const enum FigureNames {
@@ -11,15 +11,15 @@ export const enum FigureNames {
   "PAWN" = "Пешка",
 }
 
-export class Figure {
+export class Figure implements IFigure {
   color: Colors;
   logo: string | null;
-  cell: Cell;
+  cell: ICell;
   name: FigureNames;
   id: number;
-  isFirstStep: boolean | null = null;
+  isFirstStep: boolean = true;
 
-  constructor(color: Colors, cell: Cell) {
+  constructor(color: Colors, cell: ICell) {
     this.color = color;
     this.cell = cell;
     this.cell.figure = this;
@@ -29,9 +29,9 @@ export class Figure {
   }
 
   public canMove(
-    target: Cell,
+    target: ICell,
     _checkingForAttack = false,
-    _passingPawn: null | Cell = null
+    _passingPawn: null | ICell = null
   ): boolean {
     if (target.figure?.color === this.color) return false;
     return true;

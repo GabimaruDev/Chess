@@ -1,22 +1,21 @@
 import blackLogo from "../../assets/images/min-black-king.png";
 import yellowLogo from "../../assets/images/min-yellow-king.png";
-import { Cell } from "../Cell";
+import { ICell } from "../../types";
 import { Colors } from "../Colors";
 import { Figure, FigureNames } from "./Figure";
 
 export class King extends Figure {
-  isFirstStep: boolean = true;
-
-  constructor(color: Colors, cell: Cell) {
+  constructor(color: Colors, cell: ICell) {
     super(color, cell);
     this.logo = color === Colors.BLACK ? blackLogo : yellowLogo;
     this.name = FigureNames.KING;
+    this.isFirstStep = true;
   }
 
-  canMove(target: Cell, checkingForAttack = false): boolean {
+  canMove(target: ICell, checkingForAttack = false): boolean {
     if (!super.canMove(target)) {
       return false;
-    } else if (this.cell.board.castling(target, this.color)) {
+    } else if (this.isFirstStep && this.cell.board.castling(target, this.color)) {
       return true;
     }
 

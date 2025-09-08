@@ -7,18 +7,17 @@ import bishopLogoYellow from "../assets/images/min-yellow-bishop.png";
 import knightLogoYellow from "../assets/images/min-yellow-knight.png";
 import queenLogoYellow from "../assets/images/min-yellow-queen.png";
 import rookLogoYellow from "../assets/images/min-yellow-rook.png";
-import { Board } from "../models/Board";
-import { Cell } from "../models/Cell";
 import { Colors } from "../models/Colors";
 import { Bishop } from "../models/figures/Bishop";
 import { FigureNames } from "../models/figures/Figure";
 import { Knight } from "../models/figures/Knight";
 import { Queen } from "../models/figures/Queen";
 import { Rook } from "../models/figures/Rook";
+import { IBoard, ICell } from "../types";
 import ModalWindow from "./ModalWindow";
 
 interface ModalTransformPawnProps {
-  board: Board;
+  board: IBoard;
   updateBoard: () => void;
 }
 
@@ -26,7 +25,7 @@ const ModalTransformPawn: FC<ModalTransformPawnProps> = (props) => {
   const { board, updateBoard } = props;
   const sizeImg = 36;
 
-  const pawnTransformation = (figure: FigureNames, cell: Cell, color: Colors) => {
+  const pawnTransformation = (figure: FigureNames, cell: ICell, color: Colors) => {
     switch (figure) {
       case FigureNames.QUEEN:
         new Queen(color, cell);

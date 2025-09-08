@@ -1,17 +1,17 @@
-import { Board } from "./Board";
+import { IBoard, ICell, IFigure } from "../types";
 import { Colors } from "./Colors";
-import { Figure, FigureNames } from "./figures/Figure";
+import { FigureNames } from "./figures/Figure";
 
-export class Cell {
+export class Cell implements ICell {
   readonly x: number;
   readonly y: number;
   readonly color: Colors;
-  figure: Figure | null;
-  board: Board;
+  figure: IFigure | null;
+  board: IBoard;
   available: boolean;
   id: number;
 
-  constructor(board: Board, x: number, y: number, color: Colors, figure: Figure | null) {
+  constructor(board: IBoard, x: number, y: number, color: Colors, figure: IFigure | null) {
     this.board = board;
     this.x = x;
     this.y = y;
@@ -25,7 +25,7 @@ export class Cell {
     return this.figure === null;
   }
 
-  public isEmptyVertical(target: Cell): boolean {
+  public isEmptyVertical(target: ICell): boolean {
     if (this.x !== target.x) {
       return false;
     }
@@ -41,7 +41,7 @@ export class Cell {
     return true;
   }
 
-  public isEmptyHorizontal(target: Cell): boolean {
+  public isEmptyHorizontal(target: ICell): boolean {
     if (this.y !== target.y) {
       return false;
     }
@@ -57,7 +57,7 @@ export class Cell {
     return true;
   }
 
-  public isEmptyDiagonal(target: Cell): boolean {
+  public isEmptyDiagonal(target: ICell): boolean {
     const absX = Math.abs(target.x - this.x);
     const absY = Math.abs(target.y - this.y);
     if (absX !== absY) return false;
@@ -71,12 +71,12 @@ export class Cell {
     return true;
   }
 
-  private setFigure(figure: Figure): void {
+  public setFigure(figure: IFigure): void {
     this.figure = figure;
     this.figure.cell = this;
   }
 
-  public moveFigure(target: Cell): void {
+  public moveFigure(target: ICell): void {
     if (!this.figure) return;
 
     if (this.figure.name === FigureNames.KING) {
@@ -86,20 +86,21 @@ export class Cell {
     }
   }
 
-  private handleKingMove(target: Cell): void {
+  private handleKingMove(target: ICell): void {
     if (!this.figure) return;
 
-    const isCastling = this.isCastlingMove(target);
-
-    if (isCastling) {
-      this.executeCastling(target);
+    if (this.isCastlingMove(target)) {
+      if (this.figure.canMove(target)) {
+        this.executeCastling(target);
+      }
     } else {
       this.executeMove(target);
     }
   }
 
-  private isCastlingMove(target: Cell): boolean {
-    if (!this.figure || this.figure.name !== FigureNames.KING) return false;
+  private isCastlingMove(target: ICell): boolean {
+    if (!this.figure || this.figure.name !== FigureNames.KING || !this.figure.hasFirstStep())
+      return false;
 
     const castlingPositions =
       this.figure.color === Colors.BLACK
@@ -115,7 +116,7 @@ export class Cell {
     return castlingPositions.some((pos) => pos.x === target.x && pos.y === target.y);
   }
 
-  private executeCastling(target: Cell): void {
+  private executeCastling(target: ICell): void {
     if (!this.figure) return;
 
     const isBlack = this.figure.color === Colors.BLACK;
@@ -162,7 +163,7 @@ export class Cell {
     }
   }
 
-  private executeMove(target: Cell): void {
+  private executeMove(target: ICell): void {
     if (!this.figure) return;
 
     this.figure.moveFigure();

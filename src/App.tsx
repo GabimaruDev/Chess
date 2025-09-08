@@ -3,18 +3,18 @@ import BoardComponent from "./components/BoardComponent";
 import GameInfo from "./components/GameInfo";
 import { useAppDispatch } from "./hook";
 import { Board } from "./models/Board";
-import { Cell } from "./models/Cell";
 import { Colors } from "./models/Colors";
 import { Player } from "./models/Player";
 import { setGameStatus } from "./store/slice";
+import { IBoard, ICell } from "./types";
 
 function App() {
   const whitePlayer = useMemo(() => new Player(Colors.WHITE), []);
   const blackPlayer = useMemo(() => new Player(Colors.BLACK), []);
   const [currentPlayer, setCurrentPlayer] = useState<Player>(whitePlayer);
-  const [board, setBoard] = useState(new Board());
+  const [board, setBoard] = useState<IBoard>(new Board());
   const [isStartGame, setIsStartGame] = useState(true);
-  const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
+  const [selectedCell, setSelectedCell] = useState<ICell | null>(null);
   const dispatch = useAppDispatch();
 
   const initGame = useCallback(() => {
@@ -53,7 +53,7 @@ function App() {
         isStalemate,
       })
     );
-  }, [currentPlayer]);
+  }, [currentPlayer, board]);
 
   const swapPlayer = () => {
     setCurrentPlayer(currentPlayer.color === Colors.WHITE ? blackPlayer : whitePlayer);

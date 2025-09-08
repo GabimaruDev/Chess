@@ -1,20 +1,20 @@
-import { Position } from "../types";
+import { IBoard, ICell, IFigure, Position } from "../types";
 import { Cell } from "./Cell";
 import { Colors } from "./Colors";
 import { Bishop } from "./figures/Bishop";
-import { Figure, FigureNames } from "./figures/Figure";
+import { FigureNames } from "./figures/Figure";
 import { King } from "./figures/King";
 import { Knight } from "./figures/Knight";
 import { Pawn } from "./figures/Pawn";
 import { Queen } from "./figures/Queen";
 import { Rook } from "./figures/Rook";
 
-export class Board {
-  cells: Cell[][] = [];
-  lostBlackFigures: Figure[] = [];
-  lostWhiteFigures: Figure[] = [];
-  advancedPawnCell: Cell | null = null;
-  passingPawn: Cell | null = null;
+export class Board implements IBoard {
+  cells: ICell[][] = [];
+  lostBlackFigures: IFigure[] = [];
+  lostWhiteFigures: IFigure[] = [];
+  advancedPawnCell: ICell | null = null;
+  passingPawn: ICell | null = null;
 
   public initCells(): void {
     this.cells = Array.from({ length: 8 }, (_, y) =>
@@ -27,7 +27,7 @@ export class Board {
 
   public getCopyBoard(): Board {
     const newBoard = new Board();
-    newBoard.cells = this.cells;
+    newBoard.cells = this.cells.map((row) => [...row]);
     newBoard.lostWhiteFigures = this.lostWhiteFigures;
     newBoard.lostBlackFigures = this.lostBlackFigures;
     newBoard.advancedPawnCell = this.advancedPawnCell;
@@ -35,19 +35,19 @@ export class Board {
     return newBoard;
   }
 
-  public highlightCells(selectedCell: Cell | null, color: Colors): void {
+  public highlightCells(selectedCell: ICell | null): void {
     this.cells.forEach((row) => {
       row.forEach((cell) => {
-        cell.available = this.isAvailableHighlight(selectedCell, cell, color);
+        cell.available = this.isAvailableHighlight(selectedCell, cell);
       });
     });
   }
 
-  private isAvailableHighlight(selectedCell: Cell | null, target: Cell, color: Colors): boolean {
+  private isAvailableHighlight(selectedCell: ICell | null, target: ICell): boolean {
     if (!selectedCell?.figure) return false;
 
     if (selectedCell.figure.name === FigureNames.KING) {
-      return this.handleKingHighlight(selectedCell, target, color);
+      return this.handleKingHighlight(selectedCell, target);
     }
 
     if (
@@ -61,41 +61,20 @@ export class Board {
     return this.isMoveSafe(selectedCell.figure, target);
   }
 
-  private handleKingHighlight(selectedCell: Cell, target: Cell, color: Colors): boolean {
-    if (this.isCastlingMove(selectedCell, target, color)) {
-      return this.castling(target, color);
-    }
-
+  private handleKingHighlight(selectedCell: ICell, target: ICell): boolean {
     return this.isMoveSafe(selectedCell.figure!, target);
   }
 
-  private isCastlingMove(selectedCell: Cell, target: Cell, color: Colors): boolean {
-    if (!selectedCell.figure?.hasFirstStep()) return false;
-
-    const castlingPositions =
-      color === Colors.BLACK
-        ? [
-            { x: 2, y: 0 },
-            { x: 6, y: 0 },
-          ]
-        : [
-            { x: 2, y: 7 },
-            { x: 6, y: 7 },
-          ];
-
-    return castlingPositions.some((pos) => pos.x === target.x && pos.y === target.y);
-  }
-
-  public castling(target: Cell, color: Colors): boolean {
+  public castling(target: ICell, color: Colors): boolean {
     const isBlack = color === Colors.BLACK;
     const row = isBlack ? 0 : 7;
 
     if (target.y !== row) return false;
 
     if (target.x === 2) {
-      return this.canCastleLeft(row, color);
+      return this.canCastle(row, color, "left");
     } else if (target.x === 6) {
-      return this.canCastleRight(row, color);
+      return this.canCastle(row, color, "right");
     }
 
     return false;
@@ -109,36 +88,28 @@ export class Board {
     return true;
   }
 
-  private canCastleLeft(row: number, color: Colors): boolean {
-    const cells = this.cells[row];
-    const kingCell = cells[4];
-    const rookCell = cells[0];
-
-    if (!kingCell.figure?.hasFirstStep() || !rookCell.figure?.hasFirstStep()) {
-      return false;
-    } else if (!this.checkEmptyCellsBetween(0, 4, row)) return false;
-
-    for (let i = 2; i <= 4; i++) {
-      if (this.isCellUnderAttack(this.getCell(row, i), color)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private canCastleRight(row: number, color: Colors): boolean {
+  private canCastle(row: number, color: Colors, side: "left" | "right"): boolean {
     const kingCell = this.cells[row][4];
-    const rookCell = this.cells[row][7];
+    const rookIndex = side === "left" ? 0 : 7;
+    const rookCell = this.cells[row][rookIndex];
 
-    if (!kingCell.figure?.hasFirstStep() || !rookCell.figure?.hasFirstStep()) {
+    if (!kingCell.figure || !rookCell.figure) return false;
+    if (kingCell.figure.name !== FigureNames.KING || rookCell.figure.name !== FigureNames.ROOK)
+      return false;
+    if (kingCell.figure.color !== color || rookCell.figure.color !== color) return false;
+
+    if (!kingCell.figure.hasFirstStep() || !rookCell.figure.hasFirstStep()) {
       return false;
     }
 
-    if (!this.checkEmptyCellsBetween(4, 7, row)) return false;
+    const startX = side === "left" ? 0 : 4;
+    const endX = side === "left" ? 4 : 7;
+    if (!this.checkEmptyCellsBetween(startX, endX, row)) return false;
 
-    for (let i = 4; i <= 6; i++) {
-      if (this.isCellUnderAttack(this.getCell(row, i), color)) {
+    const passFrom = side === "left" ? 2 : 4;
+    const passTo = side === "left" ? 4 : 6;
+    for (let x = passFrom; x <= passTo; x++) {
+      if (this.isCellUnderAttack(this.getCell(row, x), color)) {
         return false;
       }
     }
@@ -146,7 +117,7 @@ export class Board {
     return true;
   }
 
-  public isCellUnderAttack(target: Cell, color: Colors): boolean {
+  public isCellUnderAttack(target: ICell, color: Colors): boolean {
     return this.cells.some((row) =>
       row.some((cell) => {
         const figure = cell.figure;
@@ -155,7 +126,7 @@ export class Board {
     );
   }
 
-  public isFigureProtected(figure: Figure): boolean {
+  public isFigureProtected(figure: IFigure): boolean {
     return this.cells.some((row) =>
       row.some((cell) => {
         const attackingFigure = cell.figure;
@@ -168,7 +139,7 @@ export class Board {
     );
   }
 
-  public isKingMoveSafe(king: Figure, targetCell: Cell): boolean {
+  public isKingMoveSafe(king: IFigure, targetCell: ICell): boolean {
     const originalTargetFigure = targetCell.figure;
     const originalKingCell = king.cell;
 
@@ -200,7 +171,7 @@ export class Board {
     return !this.isKingInCheck(color) && !this.hasValidMoves(color);
   }
 
-  private findKing(color: Colors): Figure | null {
+  private findKing(color: Colors): IFigure | null {
     for (const row of this.cells) {
       for (const cell of row) {
         if (cell.figure?.name === FigureNames.KING && cell.figure.color === color) {
@@ -231,7 +202,7 @@ export class Board {
     return false;
   }
 
-  private isMoveSafe(figure: Figure, targetCell: Cell): boolean {
+  public isMoveSafe(figure: IFigure, targetCell: ICell): boolean {
     const originalTargetFigure = targetCell.figure;
     const originalPosition = figure.cell;
 
@@ -248,11 +219,11 @@ export class Board {
     }
   }
 
-  public getCell(y: number, x: number): Cell {
+  public getCell(y: number, x: number): ICell {
     return this.cells[y][x];
   }
 
-  public addLostFigure(figure: Figure): void {
+  public addLostFigure(figure: IFigure): void {
     if (figure.color === Colors.BLACK) {
       this.lostBlackFigures.push(figure);
     } else {
@@ -261,7 +232,7 @@ export class Board {
   }
 
   private addFigure(
-    figureClass: new (color: Colors, cell: Cell) => Figure,
+    figureClass: new (color: Colors, cell: ICell) => IFigure,
     color: Colors,
     position: Position
   ): void {

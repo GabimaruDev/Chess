@@ -1,17 +1,17 @@
 import blackLogo from "../../assets/images/min-black-knight.png";
 import yellowLogo from "../../assets/images/min-yellow-knight.png";
-import { Cell } from "../Cell";
+import { ICell } from "../../types";
 import { Colors } from "../Colors";
 import { Figure, FigureNames } from "./Figure";
 
 export class Knight extends Figure {
-  constructor(color: Colors, cell: Cell) {
+  constructor(color: Colors, cell: ICell) {
     super(color, cell);
     this.logo = color === Colors.BLACK ? blackLogo : yellowLogo;
     this.name = FigureNames.KNIGHT;
   }
 
-  canMove(target: Cell): boolean {
+  canMove(target: ICell): boolean {
     if (!super.canMove(target)) {
       return false;
     } else {

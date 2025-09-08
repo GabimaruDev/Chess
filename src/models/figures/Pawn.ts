@@ -1,19 +1,18 @@
 import blackLogo from "../../assets/images/min-black-pawn.png";
 import yellowLogo from "../../assets/images/min-yellow-pawn.png";
-import { Cell } from "../Cell";
+import { ICell } from "../../types";
 import { Colors } from "../Colors";
 import { Figure, FigureNames } from "./Figure";
 
 export class Pawn extends Figure {
-  isFirstStep: boolean = true;
-
-  constructor(color: Colors, cell: Cell) {
+  constructor(color: Colors, cell: ICell) {
     super(color, cell);
     this.logo = color === Colors.BLACK ? blackLogo : yellowLogo;
     this.name = FigureNames.PAWN;
+    this.isFirstStep = true;
   }
 
-  canMove(target: Cell, checkingForAttack = false, _passingPawn: null | Cell = null): boolean {
+  canMove(target: ICell, checkingForAttack = false, _passingPawn: null | ICell = null): boolean {
     if (!super.canMove(target)) return false;
 
     const direction = this.color == Colors.BLACK ? 1 : -1;
