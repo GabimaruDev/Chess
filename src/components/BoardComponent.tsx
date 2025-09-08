@@ -10,7 +10,7 @@ import ModalTransformPawn from "./ModalTransformPawn";
 
 const BoardComponent: FC<BoardComponentProps> = (props) => {
   const { board, setBoard, currentPlayer, swapPlayer, selectedCell, setSelectedCell } = props;
-  const [moveSound] = useSound(move, { volume: 0.75, playbackRate: 1.25 });
+  const [moveSound] = useSound(move, { volume: 0.75 });
 
   const handleCellClick = useCallback(
     (cell: Cell) => {
@@ -25,7 +25,7 @@ const BoardComponent: FC<BoardComponentProps> = (props) => {
         }
 
         selectedCell.moveFigure(cell);
-        moveSound();
+        moveSound({ playbackRate: Math.random() * (1.5 - 1.1) + 1.1 });
         setSelectedCell(null);
         swapPlayer();
       } else if (cell.figure?.color === currentPlayer.color) {
