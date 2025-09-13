@@ -100,7 +100,7 @@
   gap: 1rem;
 }
 
-.time-lost {
+.timer__lost {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -140,21 +140,20 @@
   flex-direction: column;
   align-items: center;
   background-color: rgb(120, 120, 120);
-  padding: 0.625rem 0;
+  padding: 0.75rem;
   min-width: 15rem;
   gap: 0.75rem;
   font-size: clamp(1rem, 0.6667rem + 1.1111vw, 1.5rem);
 }
 
-.gameInfo__time {
+.timer {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 0 0.75rem;
   flex-wrap: wrap;
 }
 
-.gameInfo__time h2:last-child {
+.timer h2:last-child {
   text-align: end;
 }
 

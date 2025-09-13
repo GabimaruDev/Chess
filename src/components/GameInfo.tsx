@@ -34,17 +34,27 @@ const GameInfo: FC<GameInfoProps> = (props) => {
     }
   }, []);
 
-  const tick = () => {
+  const tick = useCallback(() => {
     const isWhiteTurn = currentPlayer?.color === Colors.WHITE;
 
     if (isWhiteTurn) {
-      updateTime((whiteTimeRef.current -= 0.1), true);
+      const next = (whiteTimeRef.current -= 0.1);
+      updateTime(next, true);
+      if (next <= 0) {
+        whiteTimeRef.current = 0;
+        stopTimer();
+      }
     } else {
-      updateTime((blackTimeRef.current -= 0.1), false);
+      const next = (blackTimeRef.current -= 0.1);
+      updateTime(next, false);
+      if (next <= 0) {
+        blackTimeRef.current = 0;
+        stopTimer();
+      }
     }
-  };
+  }, [currentPlayer?.color]);
 
-  const startTimer = () => {
+  const startTimer = useCallback(() => {
     if (timer.current) {
       clearInterval(timer.current);
     }
@@ -54,7 +64,7 @@ const GameInfo: FC<GameInfoProps> = (props) => {
     }
 
     timer.current = setInterval(tick, 100);
-  };
+  }, [isTimerPaused]);
 
   useEffect(() => {
     if (isTimerPaused) {
@@ -62,7 +72,13 @@ const GameInfo: FC<GameInfoProps> = (props) => {
     } else {
       startTimer();
     }
-  }, [currentPlayer, isTimerPaused]);
+  }, [isTimerPaused]);
+
+  useEffect(() => {
+    return () => {
+      stopTimer();
+    };
+  }, [stopTimer]);
 
   const formatTime = (seconds: number): string => {
     const totalSeconds = Math.floor(seconds);
@@ -96,8 +112,8 @@ const GameInfo: FC<GameInfoProps> = (props) => {
 
   return (
     <div className="gameInfo">
-      <div className="gameInfo__time">
-        <div className="time-lost">
+      <div className="timer">
+        <div className="timer__lost">
           <h2>
             Белые -{" "}
             <span className={whiteTime < 15 && whiteTime != 0 ? "timer__low-time" : ""}>
@@ -106,7 +122,7 @@ const GameInfo: FC<GameInfoProps> = (props) => {
           </h2>
           {figuresArray[0][0] && <LostFigures figures={figuresArray[0]} />}
         </div>
-        <div className="time-lost">
+        <div className="timer__lost">
           <h2>
             <span className={blackTime < 15 && blackTime != 0 ? "timer__low-time" : ""}>
               {formatTime(blackTime)}
@@ -123,8 +139,8 @@ const GameInfo: FC<GameInfoProps> = (props) => {
         isStartGame={isStartGame}
         onStart={handleStart}
         onRestart={handleRestart}
-        isBlackTimeOver={blackTime == 0}
-        isWhiteTimeOver={whiteTime == 0}
+        isBlackTimeOver={blackTime === 0}
+        isWhiteTimeOver={whiteTime === 0}
       />
     </div>
   );

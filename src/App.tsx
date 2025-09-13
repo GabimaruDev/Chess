@@ -21,27 +21,16 @@ function App() {
     setIsStartGame(false);
   }, []);
 
-  const restart = useCallback(() => {
-    const newBoard = new Board();
-    newBoard.initCells();
-    newBoard.addFigures();
-    setBoard(newBoard);
-    setCurrentPlayer(whitePlayer);
-    setSelectedCell(null);
-    setIsStartGame(true);
-  }, []);
-
-  useEffect(() => {
-    const currentColor = currentPlayer.color;
-    const isCheck = board.isKingInCheck(currentColor);
-    const isCheckmate = board.isCheckmate(currentColor);
-    const isStalemate = board.isStalemate(currentColor);
+  const recalcGameStatus = useCallback((b: IBoard, color: Colors) => {
+    const isCheck = b.isKingInCheck(color);
+    const isCheckmate = b.isCheckmate(color);
+    const isStalemate = b.isStalemate(color);
 
     const gameOver = isCheckmate || isStalemate;
     let winner = null;
 
     if (isCheckmate) {
-      winner = currentColor === Colors.WHITE ? { color: Colors.BLACK } : { color: Colors.WHITE };
+      winner = color === Colors.WHITE ? { color: Colors.BLACK } : { color: Colors.WHITE };
     }
 
     dispatch(
@@ -53,10 +42,23 @@ function App() {
         isStalemate,
       })
     );
-  }, [currentPlayer, board]);
+  }, []);
+
+  const restart = useCallback(() => {
+    const newBoard = new Board();
+    newBoard.initCells();
+    newBoard.addFigures();
+    setBoard(newBoard);
+    setCurrentPlayer(whitePlayer);
+    setSelectedCell(null);
+    setIsStartGame(true);
+    recalcGameStatus(newBoard, whitePlayer.color);
+  }, []);
 
   const swapPlayer = () => {
-    setCurrentPlayer(currentPlayer.color === Colors.WHITE ? blackPlayer : whitePlayer);
+    const nextPlayer = currentPlayer.color === Colors.WHITE ? blackPlayer : whitePlayer;
+    setCurrentPlayer(nextPlayer);
+    recalcGameStatus(board, nextPlayer.color);
   };
 
   useEffect(() => {
