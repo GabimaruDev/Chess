@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, memo } from "react";
 import { IFigure } from "../types";
 
 interface LostFiguresProps {
@@ -35,4 +35,4 @@ const LostFigures: FC<LostFiguresProps> = (props) => {
   );
 };
 
-export default LostFigures;
+export default memo(LostFigures);

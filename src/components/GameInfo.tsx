@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, memo, useCallback, useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../hook";
 import { Colors } from "../models/Colors";
 import { GameInfoProps } from "../types";
@@ -6,7 +6,15 @@ import GameModals from "./GameModals";
 import LostFigures from "./LostFigures";
 
 const GameInfo: FC<GameInfoProps> = (props) => {
-  const { currentPlayer, restart, isStartGame, initGame, hasAdvancedPawn, figuresArray } = props;
+  const {
+    currentPlayer,
+    restart,
+    isStartGame,
+    initGame,
+    hasAdvancedPawn,
+    lostBlackFigures,
+    lostWhiteFigures,
+  } = props;
   const [blackTime, setBlackTime] = useState(600);
   const [whiteTime, setWhiteTime] = useState(600);
   const whiteTimeRef = useRef<number>(600);
@@ -120,7 +128,7 @@ const GameInfo: FC<GameInfoProps> = (props) => {
               {formatTime(whiteTime)}
             </span>
           </h2>
-          {figuresArray[0][0] && <LostFigures figures={figuresArray[0]} />}
+          {lostWhiteFigures.length > 0 && <LostFigures figures={lostWhiteFigures} />}
         </div>
         <div className="timer__lost">
           <h2>
@@ -129,7 +137,7 @@ const GameInfo: FC<GameInfoProps> = (props) => {
             </span>{" "}
             - Чёрные
           </h2>
-          {figuresArray[1][0] && <LostFigures figures={figuresArray[1]} />}
+          {lostBlackFigures.length > 0 && <LostFigures figures={lostBlackFigures} />}
         </div>
       </div>
       <button className="btn" onClick={handleRestart}>
@@ -137,8 +145,8 @@ const GameInfo: FC<GameInfoProps> = (props) => {
       </button>
       <GameModals
         isStartGame={isStartGame}
-        onStart={handleStart}
-        onRestart={handleRestart}
+        handleStart={handleStart}
+        handleRestart={handleRestart}
         isBlackTimeOver={blackTime === 0}
         isWhiteTimeOver={whiteTime === 0}
       />
@@ -146,4 +154,4 @@ const GameInfo: FC<GameInfoProps> = (props) => {
   );
 };
 
-export default GameInfo;
+export default memo(GameInfo);

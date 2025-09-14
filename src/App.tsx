@@ -82,7 +82,8 @@ function App() {
           initGame={initGame}
           isStartGame={isStartGame}
           hasAdvancedPawn={!!board.advancedPawnCell}
-          figuresArray={[board.lostBlackFigures, board.lostWhiteFigures]}
+          lostBlackFigures={board.lostBlackFigures}
+          lostWhiteFigures={board.lostWhiteFigures}
         />
       </div>
     </div>

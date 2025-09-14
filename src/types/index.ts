@@ -73,7 +73,8 @@ export interface GameInfoProps {
   initGame: () => void;
   isStartGame: boolean;
   hasAdvancedPawn: boolean;
-  figuresArray: [IFigure[], IFigure[]];
+  lostBlackFigures: IFigure[];
+  lostWhiteFigures: IFigure[];
 }
 
 export interface GameState {

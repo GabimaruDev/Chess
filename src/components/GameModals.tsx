@@ -5,14 +5,14 @@ import ModalWindow from "./ModalWindow";
 
 interface GameModalsProps {
   isStartGame: boolean;
-  onStart: () => void;
-  onRestart: () => void;
+  handleStart: () => void;
+  handleRestart: () => void;
   isBlackTimeOver: boolean;
   isWhiteTimeOver: boolean;
 }
 
 const GameModals: FC<GameModalsProps> = (props) => {
-  const { isStartGame, onStart, onRestart, isBlackTimeOver, isWhiteTimeOver } = props;
+  const { isStartGame, handleStart, handleRestart, isBlackTimeOver, isWhiteTimeOver } = props;
   const gameState = useAppSelector((state) => state.chess);
 
   return (
@@ -22,7 +22,7 @@ const GameModals: FC<GameModalsProps> = (props) => {
           title={`Мат! ${gameState.winner?.color === Colors.BLACK ? "Чёрные" : "Белые"} выиграли!`}
           body="Сыграете ещё одну игру?"
           footer={
-            <button className="btn" onClick={onRestart}>
+            <button className="btn" onClick={handleRestart}>
               Новая игра
             </button>
           }
@@ -33,7 +33,7 @@ const GameModals: FC<GameModalsProps> = (props) => {
           title="Пат! Ничья!"
           body="Сыграете ещё одну игру?"
           footer={
-            <button className="btn" onClick={onRestart}>
+            <button className="btn" onClick={handleRestart}>
               Новая игра
             </button>
           }
@@ -44,7 +44,7 @@ const GameModals: FC<GameModalsProps> = (props) => {
           title={`Время ${isBlackTimeOver ? "чёрных" : "белых"} вышло!`}
           body="Сыграете ещё одну игру?"
           footer={
-            <button className="btn" onClick={onRestart}>
+            <button className="btn" onClick={handleRestart}>
               Новая игра
             </button>
           }
@@ -55,7 +55,7 @@ const GameModals: FC<GameModalsProps> = (props) => {
           title="Классические шахматы"
           body={`Нажмите на кнопку, если готовы начать играть`}
           footer={
-            <button className="btn" onClick={onStart}>
+            <button className="btn" onClick={handleStart}>
               Играть
             </button>
           }
